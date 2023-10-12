@@ -5,6 +5,8 @@ export enum GetUserByEmailError {
   UserDoseNotExist = 'UserDoseNotExist',
 }
 
+export type TGetUserByIdRes = Result<User, GetUserByEmailError>;
+
 export type TGetUserByEmailRes = Result<User, GetUserByEmailError>;
 
 export type TCreateUserRes = Result<User>;

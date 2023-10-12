@@ -6,12 +6,21 @@ import {
   TCreateUserRes,
   TCreateUserWithGoogleRes,
   TGetUserByEmailRes,
+  TGetUserByIdRes,
 } from './users.type';
 import { CreateUserDto } from './dto';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaClient) {}
+
+  async getById(userId: string): Promise<TGetUserByIdRes> {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+
+    if (user) return Ok(user);
+
+    return Err(GetUserByEmailError.UserDoseNotExist);
+  }
 
   async getByEmail(email: string): Promise<TGetUserByEmailRes> {
     const user = await this.prisma.user.findUnique({ where: { email } });

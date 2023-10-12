@@ -3,5 +3,17 @@ content-type: application/json
 
 {
   "email": "ludinhquan@gmail.com",
-  "password": "test123"
+  "password": "Abc@1234"
 }
+
+POST localhost:4000/login
+content-type: application/json
+
+{
+  "email": "ludinhquan@gmail.com",
+  "password": "Abc@1234"
+}
+
+POST localhost:4000/logout
+content-type: application/json
+Cookie: Authentication=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMDlkMGMwNC05NDZmLTRmMWUtODEwOS0zYzUyY2ZiMWUwODgiLCJpc0VtYWlsQ29uZmlybWVkIjpudWxsLCJpYXQiOjE2OTcxMTc5MTAsImV4cCI6MTY5NzExNzk3MH0.IBMQmf1P07halxre01i1ILL5rY_FhM496DVsQHPfETg
