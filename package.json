@@ -1,0 +1,15 @@
+{
+  "name": "aha-exam",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "pnpm run --parallel dev",
+    "build": "pnpm run --parallel build",
+    "svr": "pnpm --filter server",
+    "client": "pnpm --filter client"
+  },
+  "keywords": [],
+  "author": "ludinhquan@gmail.com",
+  "license": "ISC"
+}
