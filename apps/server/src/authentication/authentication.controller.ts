@@ -1,7 +1,7 @@
-import { BadRequestException, Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthenticationService } from './authentication.service';
-import { RegisterError } from './authentication.type';
 import { RegisterDto } from './dto';
+import { BadRequestError, InternalServerError } from '@lib/core';
 
 @Controller()
 export class AuthenticationController {
@@ -9,12 +9,15 @@ export class AuthenticationController {
 
   @Post('register')
   async register(@Body() registrationData: RegisterDto) {
-    const registerResult =
-      await this.authenticationService.register(registrationData);
+    try {
+      const registerResult =
+        await this.authenticationService.register(registrationData);
 
-    if (registerResult.ok) return registerResult.value;
+      if (registerResult.ok) return registerResult.value;
 
-    if (registerResult.error === RegisterError.UserAlreadyExist)
-      throw new BadRequestException('User with that email already exists');
+      return new BadRequestError(registerResult.error as string);
+    } catch (error) {
+      return new InternalServerError(error.message);
+    }
   }
 }

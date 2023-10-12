@@ -1,7 +1,12 @@
 import { Err, Ok } from '@lib/core';
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { GetUserByEmailError, TGetUserByEmailRes } from './users.type';
+import {
+  GetUserByEmailError,
+  TCreateUserRes,
+  TCreateUserWithGoogleRes,
+  TGetUserByEmailRes,
+} from './users.type';
 import { CreateUserDto } from './dto';
 
 @Injectable()
@@ -16,17 +21,17 @@ export class UsersService {
     return Err(GetUserByEmailError.UserDoseNotExist);
   }
 
-  async create(userData: CreateUserDto) {
-    const newUser = await this.prisma.user.create({
-      data: { ...userData },
-    });
-
+  async create(userData: CreateUserDto): Promise<TCreateUserRes> {
+    const newUser = await this.prisma.user.create({ data: userData });
     newUser.password = null;
 
     return Ok(newUser);
   }
 
-  async createWithGoogle(email: string, name: string) {
+  async createWithGoogle(
+    email: string,
+    name: string,
+  ): Promise<TCreateUserWithGoogleRes> {
     const newUser = await this.prisma.user.create({
       data: {
         email,

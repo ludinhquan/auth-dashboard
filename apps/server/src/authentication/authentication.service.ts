@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
 import { Err } from '@lib/core';
 import { Password } from './password';
-import { RegisterError } from './authentication.type';
+import { RegisterError, TRegisterRes } from './authentication.type';
 import { RegisterDto } from './dto';
+import { UsersService } from '../users';
 
 @Injectable()
 export class AuthenticationService {
   constructor(private usersService: UsersService) {}
 
-  public async register(registrationData: RegisterDto) {
+  public async register(registrationData: RegisterDto): Promise<TRegisterRes> {
     const userResult = await this.usersService.getByEmail(
       registrationData.email,
     );
