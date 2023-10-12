@@ -10,6 +10,10 @@ export class AuthenticationService {
   constructor(private usersService: UsersService) {}
 
   public async register(registrationData: RegisterDto): Promise<TRegisterRes> {
+    const invalidPassword = Password.validate(registrationData.password);
+
+    if (invalidPassword) return Err(RegisterError.PasswordInvalid);
+
     const userResult = await this.usersService.getByEmail(
       registrationData.email,
     );
