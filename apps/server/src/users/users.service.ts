@@ -8,7 +8,7 @@ import {
   TGetUserByEmailRes,
   TGetUserByIdRes,
 } from './users.type';
-import { CreateUserDto } from './dto';
+import { CreateUserDto, UpdateUserDto } from './dto';
 
 @Injectable()
 export class UsersService {
@@ -51,5 +51,12 @@ export class UsersService {
     });
 
     return Ok(newUser);
+  }
+
+  async updateProfile(userId: string, userData: UpdateUserDto) {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { name: userData.name },
+    });
   }
 }
