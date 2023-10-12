@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   Post,
   Req,
@@ -58,5 +59,12 @@ export class AuthenticationController {
       'Set-Cookie',
       this.authenticationService.getCookiesForLogOut(),
     );
+  }
+
+  @HttpCode(200)
+  @UseGuards(JwtAuthenticationGuard)
+  @Get('me')
+  async getProfile(@CurrentUser() user: User) {
+    return user;
   }
 }

@@ -70,7 +70,7 @@ export class AuthenticationService {
       secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
       expiresIn: `${this.configService.get(
         'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
-      )}s`,
+      )}`,
     });
 
     return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(

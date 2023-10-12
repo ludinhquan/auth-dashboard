@@ -23,7 +23,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: TTokenPayload) {
-    console.log(payload);
-    return this.userService.getById(payload.userId);
+    const userResult = await this.userService.getById(payload.userId);
+
+    if (userResult.fail) return userResult;
+
+    userResult.value.password = null;
+
+    return userResult.value;
   }
 }
