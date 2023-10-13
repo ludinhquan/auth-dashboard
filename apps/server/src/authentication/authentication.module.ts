@@ -13,5 +13,6 @@ import { LocalStrategy } from './local';
   imports: [UsersModule, EmailConfirmationModule],
   providers: [AuthenticationService, LocalStrategy, JwtStrategy, PrismaClient],
   controllers: [AuthenticationController],
+  exports: [AuthenticationService],
 })
 export class AuthenticationModule {}
