@@ -1,10 +1,7 @@
 import { Err, Ok } from '@lib/core';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
 import { PrismaClient } from '@prisma/client';
-
-import { UsersService } from '../users';
 
 import {
   AuthError,
@@ -14,7 +11,11 @@ import {
   TTokenPayload,
 } from './authentication.type';
 import { RegisterDto, UpdatePasswordDto } from './dto';
+import { EmailConfirmationService } from './emailConfirmation';
 import { Password } from './password';
+
+import { JwtService } from '@/modules';
+import { UsersService } from '@/users';
 
 @Injectable()
 export class AuthenticationService {
@@ -23,6 +24,7 @@ export class AuthenticationService {
     private configService: ConfigService,
     private jwtService: JwtService,
     private prisma: PrismaClient,
+    private emailConfirmationService: EmailConfirmationService,
   ) {}
 
   public async register(registrationData: RegisterDto): Promise<TRegisterRes> {
@@ -43,6 +45,11 @@ export class AuthenticationService {
       ...registrationData,
       password: hashedPassword,
     });
+
+    if (createdUser.ok)
+      this.emailConfirmationService.sendVerificationLink(
+        registrationData.email,
+      );
 
     return createdUser;
   }
@@ -70,12 +77,7 @@ export class AuthenticationService {
   ) {
     const payload: TTokenPayload = { userId, isEmailConfirmed };
 
-    const token = this.jwtService.sign(payload, {
-      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
-      expiresIn: `${this.configService.get(
-        'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
-      )}`,
-    });
+    const token = this.jwtService.sign(payload);
 
     return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
       'JWT_ACCESS_TOKEN_EXPIRATION_TIME',

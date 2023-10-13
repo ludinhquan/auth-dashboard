@@ -2,7 +2,7 @@ POST localhost:4000/register
 content-type: application/json
 
 {
-  "email": "ludinhquan@gmail.com",
+  "email": "ludinhquan1@gmail.com",
   "password": "Abc@1234"
 }
 
@@ -16,16 +16,36 @@ content-type: application/json
 
 POST localhost:4000/logout
 content-type: application/json
-Cookie: Authentication=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMDlkMGMwNC05NDZmLTRmMWUtODEwOS0zYzUyY2ZiMWUwODgiLCJpc0VtYWlsQ29uZmlybWVkIjpudWxsLCJpYXQiOjE2OTcxMTg4NjksImV4cCI6MTY5NzIwNTI2OX0.5MxYYV1MbRoEEJmL1yrcPBkmRPeVwaqzvCir5tZhnTw
+Cookie: Authentication=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyOGUyZWU5Yi00MDRjLTRiYmEtOTZiZS1kNTFmYjQ5MWIxMjkiLCJpc0VtYWlsQ29uZmlybWVkIjpudWxsLCJpYXQiOjE2OTcxODcxOTQsImV4cCI6MTY5NzI3MzU5NH0.GonmkIj_LgmyPsEu0S0xTZC33RnfF1za8VTURrS1Whs
 
 GET localhost:4000/me
 content-type: application/json
-Cookie: Authentication=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMDlkMGMwNC05NDZmLTRmMWUtODEwOS0zYzUyY2ZiMWUwODgiLCJpc0VtYWlsQ29uZmlybWVkIjpudWxsLCJpYXQiOjE2OTcxMTg4NjksImV4cCI6MTY5NzIwNTI2OX0.5MxYYV1MbRoEEJmL1yrcPBkmRPeVwaqzvCir5tZhnTw
+Cookie: Authentication=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyOGUyZWU5Yi00MDRjLTRiYmEtOTZiZS1kNTFmYjQ5MWIxMjkiLCJpc0VtYWlsQ29uZmlybWVkIjpudWxsLCJpYXQiOjE2OTcxODcxOTQsImV4cCI6MTY5NzI3MzU5NH0.GonmkIj_LgmyPsEu0S0xTZC33RnfF1za8VTURrS1Whs
 
-POST localhost:4000/user/009d0c04-946f-4f1e-8109-3c52cfb1e088
+PATCH localhost:4000/user
 content-type: application/json
-Cookie: Authentication=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMDlkMGMwNC05NDZmLTRmMWUtODEwOS0zYzUyY2ZiMWUwODgiLCJpc0VtYWlsQ29uZmlybWVkIjpudWxsLCJpYXQiOjE2OTcxMTg4NjksImV4cCI6MTY5NzIwNTI2OX0.5MxYYV1MbRoEEJmL1yrcPBkmRPeVwaqzvCir5tZhnTw
+Cookie: Authentication=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyOGUyZWU5Yi00MDRjLTRiYmEtOTZiZS1kNTFmYjQ5MWIxMjkiLCJpc0VtYWlsQ29uZmlybWVkIjpudWxsLCJpYXQiOjE2OTcxODcxOTQsImV4cCI6MTY5NzI3MzU5NH0.GonmkIj_LgmyPsEu0S0xTZC33RnfF1za8VTURrS1Whs
 
 {
   "name": "Lu Dinh Quan"
 }
+
+POST localhost:4000/reset-password
+content-type: application/json
+Cookie: Authentication=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyOGUyZWU5Yi00MDRjLTRiYmEtOTZiZS1kNTFmYjQ5MWIxMjkiLCJpc0VtYWlsQ29uZmlybWVkIjpudWxsLCJpYXQiOjE2OTcxODcxOTQsImV4cCI6MTY5NzI3MzU5NH0.GonmkIj_LgmyPsEu0S0xTZC33RnfF1za8VTURrS1Whs
+
+{
+  "oldPassword": "Abc@1234",
+  "newPassword": "Abc@1234"
+}
+
+POST localhost:4000/email-confirmation/confirm
+content-type: application/json
+
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx1ZGluaHF1YW5AZ21haWwuY29tIiwiaWF0IjoxNjk3MTg4NzQ3LCJleHAiOjE2OTcyNzUxNDd9.0Fjcq1lnXOXC4hmtU3wuiTZNakEkwTvj-TYdvVdGp0Q"
+}
+
+POST localhost:4000/email-confirmation/resend-confirmation-link
+content-type: application/json
+Cookie: Authentication=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIyOGUyZWU5Yi00MDRjLTRiYmEtOTZiZS1kNTFmYjQ5MWIxMjkiLCJpc0VtYWlsQ29uZmlybWVkIjpudWxsLCJpYXQiOjE2OTcxODcxOTQsImV4cCI6MTY5NzI3MzU5NH0.GonmkIj_LgmyPsEu0S0xTZC33RnfF1za8VTURrS1Whs

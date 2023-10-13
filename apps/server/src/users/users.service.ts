@@ -60,4 +60,11 @@ export class UsersService {
       data: { name: userData.name },
     });
   }
+
+  async markEmailAsConfirmed(email: string) {
+    await this.prisma.user.update({
+      where: { email },
+      data: { isEmailConfirmed: true },
+    });
+  }
 }
