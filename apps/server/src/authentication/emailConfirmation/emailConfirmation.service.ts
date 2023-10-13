@@ -8,7 +8,7 @@ import {
   VerificationTokenPayload,
 } from './emailConfirmation.type';
 
-import { EmailService } from '@/modules';
+import { EmailService } from '@/common';
 import { UsersService } from '@/users';
 
 @Injectable({})

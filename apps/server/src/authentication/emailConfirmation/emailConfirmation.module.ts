@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { EmailConfirmationController } from './emailConfirmation.controller';
 import { EmailConfirmationService } from './emailConfirmation.service';
 
-import { EmailModule } from '@/modules';
+import { EmailModule } from '@/common';
 import { UsersModule } from '@/users';
 
 @Module({
