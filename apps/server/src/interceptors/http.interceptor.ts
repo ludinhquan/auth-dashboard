@@ -7,7 +7,6 @@ import {
   NestInterceptor,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable()
@@ -20,7 +19,7 @@ export class HttpInterceptor implements NestInterceptor {
     return [decodeURIComponent(originalUrl), userAgent, ip].join(' ');
   }
 
-  intercept(context: ExecutionContext, handler: CallHandler): Observable<any> {
+  intercept(context: ExecutionContext, handler: CallHandler) {
     const ctx = context.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
@@ -52,7 +51,7 @@ export class HttpInterceptor implements NestInterceptor {
     });
 
     return handler.handle().pipe(
-      map((data: any) => {
+      map((data: unknown) => {
         if (data instanceof CustomError) throw data;
         return data;
       }),

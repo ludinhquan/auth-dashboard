@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { PingController } from './ping.controller';
+
 import { AuthenticationModule } from './authentication';
+import { PingController } from './ping.controller';
 
 @Module({
   imports: [AuthenticationModule],

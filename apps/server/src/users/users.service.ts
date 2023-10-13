@@ -1,6 +1,8 @@
 import { Err, Ok } from '@lib/core';
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+
+import { CreateUserDto, UpdateUserDto } from './dto';
 import {
   GetUserByEmailError,
   TCreateUserRes,
@@ -8,7 +10,6 @@ import {
   TGetUserByEmailRes,
   TGetUserByIdRes,
 } from './users.type';
-import { CreateUserDto, UpdateUserDto } from './dto';
 
 @Injectable()
 export class UsersService {

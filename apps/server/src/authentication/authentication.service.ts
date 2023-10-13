@@ -1,6 +1,10 @@
-import { Injectable } from '@nestjs/common';
 import { Err, Ok } from '@lib/core';
-import { Password } from './password';
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+
+import { UsersService } from '../users';
+
 import {
   AuthError,
   RegisterError,
@@ -9,9 +13,7 @@ import {
   TTokenPayload,
 } from './authentication.type';
 import { RegisterDto } from './dto';
-import { UsersService } from '../users';
-import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
+import { Password } from './password';
 
 @Injectable()
 export class AuthenticationService {

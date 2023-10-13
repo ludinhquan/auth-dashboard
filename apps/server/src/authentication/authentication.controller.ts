@@ -1,3 +1,4 @@
+import { BadRequestError, InternalServerError } from '@lib/core';
 import {
   Body,
   Controller,
@@ -7,14 +8,15 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { User } from '@prisma/client';
+import { Request } from 'express';
+
+import { CurrentUser } from '../decorators';
+
 import { AuthenticationService } from './authentication.service';
 import { RegisterDto } from './dto';
-import { BadRequestError, InternalServerError } from '@lib/core';
-import { Request } from 'express';
-import { CurrentUser } from '../decorators';
-import { User } from '@prisma/client';
-import { LocalAuthenticationGuard } from './local';
 import { JwtAuthenticationGuard } from './jwt';
+import { LocalAuthenticationGuard } from './local';
 
 @Controller()
 export class AuthenticationController {
