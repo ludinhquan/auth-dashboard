@@ -9,6 +9,7 @@ async function bootstrap() {
 
   app.use(cookieParser());
   app.useGlobalInterceptors(new HttpInterceptor());
+  app.enableCors({ origin: '*' });
 
   await app.listen(process.env.PORT || 4000);
 }
