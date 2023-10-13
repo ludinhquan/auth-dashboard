@@ -1,21 +1,18 @@
-import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Patch } from '@nestjs/common';
+import { User } from '@prisma/client';
 
-import { JwtAuthenticationGuard } from '../authentication/jwt';
+import { Authentication, CurrentUser } from '../decorators';
 
 import { UpdateUserDto } from './dto';
 import { UsersService } from './users.service';
 
 @Controller('user')
+@Authentication()
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @UseGuards(JwtAuthenticationGuard)
-  @Post(':userId')
-  updateProfile(
-    @Param('userId') userId: string,
-    @Body() userData: UpdateUserDto,
-  ) {
-    console.log(userData);
-    this.usersService.updateProfile(userId, userData);
+  @Patch()
+  updateProfile(@CurrentUser() user: User, @Body() userData: UpdateUserDto) {
+    this.usersService.updateProfile(user.id, userData);
   }
 }

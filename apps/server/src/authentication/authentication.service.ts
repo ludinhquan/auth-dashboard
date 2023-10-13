@@ -2,6 +2,7 @@ import { Err, Ok } from '@lib/core';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { PrismaClient } from '@prisma/client';
 
 import { UsersService } from '../users';
 
@@ -12,7 +13,7 @@ import {
   TRegisterRes,
   TTokenPayload,
 } from './authentication.type';
-import { RegisterDto } from './dto';
+import { RegisterDto, UpdatePasswordDto } from './dto';
 import { Password } from './password';
 
 @Injectable()
@@ -21,12 +22,13 @@ export class AuthenticationService {
     private usersService: UsersService,
     private configService: ConfigService,
     private jwtService: JwtService,
+    private prisma: PrismaClient,
   ) {}
 
   public async register(registrationData: RegisterDto): Promise<TRegisterRes> {
     const invalidPassword = Password.validate(registrationData.password);
 
-    if (invalidPassword) return Err(RegisterError.PasswordInvalid);
+    if (invalidPassword) return Err(RegisterError.IncorrectPasswordFormat);
 
     const userResult = await this.usersService.getByEmail(
       registrationData.email,
@@ -85,5 +87,33 @@ export class AuthenticationService {
       'Authentication=; HttpOnly; Path=/; Max-Age=0',
       'Refresh=; HttpOnly; Path=/; Max-Age=0',
     ];
+  }
+
+  async resetPassword(userId: string, data: UpdatePasswordDto) {
+    const { oldPassword, newPassword } = data;
+
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (!user) return Err(AuthError.WrongCredentialsProvided);
+
+    const isOldPasswordMatch = await Password.compare(
+      oldPassword,
+      user.password!,
+    );
+    if (!isOldPasswordMatch) return Err(AuthError.WrongCredentialsProvided);
+
+    const invalidPassword = Password.validate(newPassword);
+
+    if (invalidPassword) return Err(RegisterError.IncorrectPasswordFormat);
+
+    const hashedPassword = await Password.hash(newPassword);
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedPassword },
+    });
+
+    return Ok(true);
   }
 }

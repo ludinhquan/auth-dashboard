@@ -3,18 +3,20 @@ import { User } from '@prisma/client';
 
 export enum RegisterError {
   UserAlreadyExist = 'UserAlreadyExist',
-  PasswordInvalid = 'PasswordInvalid',
+  IncorrectPasswordFormat = 'IncorrectPasswordFormat',
 }
 
 export enum AuthError {
   WrongCredentialsProvided = 'WrongCredentialsProvided',
 }
 
-export type TRegisterRes = Result<User, RegisterError>;
-
-export type TLoginRes = Result<User, AuthError>;
-
 export type TTokenPayload = {
   userId: string;
   isEmailConfirmed?: boolean;
 };
+
+export type TRegisterRes = Result<User, RegisterError>;
+
+export type TLoginRes = Result<User, AuthError>;
+
+export type TResetPasswordRes = Result<boolean, RegisterError | AuthError>;

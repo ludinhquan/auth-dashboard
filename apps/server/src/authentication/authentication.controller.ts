@@ -14,7 +14,7 @@ import { Request } from 'express';
 import { CurrentUser } from '../decorators';
 
 import { AuthenticationService } from './authentication.service';
-import { RegisterDto } from './dto';
+import { RegisterDto, UpdatePasswordDto } from './dto';
 import { JwtAuthenticationGuard } from './jwt';
 import { LocalAuthenticationGuard } from './local';
 
@@ -68,5 +68,22 @@ export class AuthenticationController {
   @Get('me')
   async getProfile(@CurrentUser() user: User) {
     return user;
+  }
+
+  @HttpCode(200)
+  @UseGuards(JwtAuthenticationGuard)
+  @Post('reset-password')
+  async resetPassword(
+    @CurrentUser() user: User,
+    @Body() data: UpdatePasswordDto,
+  ) {
+    const result = await this.authenticationService.resetPassword(
+      user.id,
+      data,
+    );
+
+    if (result.ok) return;
+
+    return new BadRequestError(result.error!);
   }
 }
