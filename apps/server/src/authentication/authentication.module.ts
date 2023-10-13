@@ -9,10 +9,8 @@ import { EmailConfirmationModule } from './emailConfirmation';
 import { JwtStrategy } from './jwt';
 import { LocalStrategy } from './local';
 
-import { JwtModule } from '@/modules';
-
 @Module({
-  imports: [UsersModule, JwtModule, EmailConfirmationModule],
+  imports: [UsersModule, EmailConfirmationModule],
   providers: [AuthenticationService, LocalStrategy, JwtStrategy, PrismaClient],
   controllers: [AuthenticationController],
 })

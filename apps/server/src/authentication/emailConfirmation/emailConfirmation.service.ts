@@ -1,13 +1,14 @@
 import { Err, Ok } from '@lib/core';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 import {
   ConfirmEmailError,
   VerificationTokenPayload,
 } from './emailConfirmation.type';
 
-import { EmailService, JwtService } from '@/modules';
+import { EmailService } from '@/modules';
 import { UsersService } from '@/users';
 
 @Injectable({})
@@ -22,7 +23,14 @@ export class EmailConfirmationService {
   public sendVerificationLink(email: string) {
     const payload: VerificationTokenPayload = { email };
 
-    const token = this.jwtService.sign(payload);
+    const options = {
+      secret: this.configService.get('JWT_VERIFICATION_TOKEN_SECRET'),
+      expiresIn: this.configService.get(
+        'JWT_VERIFICATION_TOKEN_EXPIRATION_TIME',
+      ),
+    };
+
+    const token = this.jwtService.sign(payload, options);
 
     const host = this.configService.get('EMAIL_CONFIRMATION_URL');
     const url = `${host}?token=${token}`;
@@ -66,7 +74,14 @@ export class EmailConfirmationService {
 
   public async decodeConfirmationToken(token: string) {
     try {
-      const payload: VerificationTokenPayload = this.jwtService.verify(token);
+      const options = {
+        secret: this.configService.get('JWT_VERIFICATION_TOKEN_SECRET'),
+      };
+
+      const payload: VerificationTokenPayload = this.jwtService.verify(
+        token,
+        options,
+      );
 
       if (typeof payload === 'object' && 'email' in payload) {
         return this.confirmEmail(payload.email);

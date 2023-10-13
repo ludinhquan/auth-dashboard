@@ -1,6 +1,7 @@
 import { Err, Ok } from '@lib/core';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 import { PrismaClient } from '@prisma/client';
 
 import {
@@ -14,7 +15,6 @@ import { RegisterDto, UpdatePasswordDto } from './dto';
 import { EmailConfirmationService } from './emailConfirmation';
 import { Password } from './password';
 
-import { JwtService } from '@/modules';
 import { UsersService } from '@/users';
 
 @Injectable()
@@ -77,11 +77,14 @@ export class AuthenticationService {
   ) {
     const payload: TTokenPayload = { userId, isEmailConfirmed };
 
-    const token = this.jwtService.sign(payload);
+    const options = {
+      secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
+      expiresIn: this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME'),
+    };
 
-    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-      'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
-    )}`;
+    const token = this.jwtService.sign(payload, options);
+
+    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${options.expiresIn}`;
   }
 
   public getCookiesForLogOut() {
