@@ -39,7 +39,11 @@ export class AuthenticationController {
   @HttpCode(200)
   @UseGuards(LocalAuthenticationGuard)
   @Post('login')
-  async logIn(@CurrentUser() user: User, @Req() req: Request) {
+  async logIn(
+    @CurrentUser() user: User,
+    @Req() req: Request,
+    @Body() _: RegisterDto, // for swagger document
+  ) {
     const accessTokenCookie =
       this.authenticationService.getCookieWithJwtAccessToken(
         user.id,

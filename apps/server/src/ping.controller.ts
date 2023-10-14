@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 
 @Controller()
 export class PingController {
-  @Get()
+  @Get('/ping')
   ping() {
     return 'Pong!';
   }

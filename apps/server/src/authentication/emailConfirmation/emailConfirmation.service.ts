@@ -32,7 +32,7 @@ export class EmailConfirmationService {
 
     const token = this.jwtService.sign(payload, options);
 
-    const host = this.configService.get('EMAIL_CONFIRMATION_URL');
+    const host = this.configService.get('CLIENT_URL');
     const url = `${host}?token=${token}`;
 
     const text = `Welcome to the application. To confirm the email address, click here: ${url}`;
