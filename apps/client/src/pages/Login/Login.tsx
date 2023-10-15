@@ -8,17 +8,32 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useAuth } from "@/hooks";
+import { generatePath, useNavigate } from "react-router-dom";
+import { ROUTE_CONFIG } from "@/routers/config";
 
 const defaultTheme = createTheme();
 
 export const LoginPage = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const { isAuthenticated, login } = useAuth();
+  console.log("LoginPage", isAuthenticated);
+  const navigate = useNavigate();
+
+  React.useEffect(() => {
+    if (isAuthenticated) navigate(generatePath(ROUTE_CONFIG.HOME.PATH));
+  }, [navigate, isAuthenticated]);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+
+    const body = {
+      email: data.get("email") as string,
+      password: data.get("password") as string,
+    };
+
+    await login(body);
   };
 
   return (
