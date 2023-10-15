@@ -12,6 +12,8 @@ import { HomePage } from "../pages/Home";
 import { useAuth } from "@/hooks";
 import { useEffect } from "react";
 import { LoadingPage } from "@/pages/Loading/Loading";
+import { Layout } from "@/components/Layout";
+import { Profile } from "@/pages/Profile";
 
 export const Router = () => {
   return (
@@ -27,7 +29,7 @@ const ProtectedRoute = () => {
   if (!isAuthenticated)
     return <Navigate to={ROUTE_CONFIG.LOGIN.PATH} replace />;
 
-  return <Outlet />;
+  return <Layout />;
 };
 
 const LoginRoute = () => {
@@ -54,7 +56,7 @@ const Routers = () => {
       </Route>
       <Route element={<ProtectedRoute />}>
         <Route path={ROUTE_CONFIG.HOME.PATH} element={<HomePage />} />
-        <Route path={ROUTE_CONFIG.PROFILE.PATH} element={"Profile"} />
+        <Route path={ROUTE_CONFIG.PROFILE.PATH} element={<Profile />} />
       </Route>
       <Route path="*" element={<Navigate to={ROUTE_CONFIG.HOME.PATH} />} />
     </Routes>

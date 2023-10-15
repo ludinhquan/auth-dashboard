@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useEffect } from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -11,15 +11,33 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useAuth } from "@/hooks";
 import { generatePath, useNavigate } from "react-router-dom";
 import { ROUTE_CONFIG } from "@/routers/config";
+import { GoogleIcon } from "@/components/Icons";
+import { useGoogleAuth } from "@/hooks/useGoogleAuth0";
+import { CircularProgress } from "@mui/material";
 
 const defaultTheme = createTheme();
 
 export const LoginPage = () => {
-  const { isAuthenticated, login } = useAuth();
-  console.log("LoginPage", isAuthenticated);
+  const { isAuthenticated, isLoginLoading, login, loginWithGoogle } = useAuth();
+  const {
+    isLoading: isGoogleAuthenticating,
+    isAuthenticated: isSocialAuthenticated,
+    loginWithPopup,
+    getAuthToken,
+  } = useGoogleAuth();
   const navigate = useNavigate();
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (!isSocialAuthenticated) return;
+    const handleLoginWithGoogle = async () => {
+      const token = await getAuthToken();
+      await loginWithGoogle({ token });
+    };
+
+    handleLoginWithGoogle();
+  }, [isSocialAuthenticated, loginWithGoogle, getAuthToken]);
+
+  useEffect(() => {
     if (isAuthenticated) navigate(generatePath(ROUTE_CONFIG.HOME.PATH));
   }, [navigate, isAuthenticated]);
 
@@ -42,7 +60,7 @@ export const LoginPage = () => {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 20,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -59,6 +77,7 @@ export const LoginPage = () => {
           >
             <TextField
               margin="normal"
+              size="small"
               required
               fullWidth
               id="email"
@@ -70,6 +89,7 @@ export const LoginPage = () => {
             <TextField
               margin="normal"
               required
+              size="small"
               fullWidth
               name="password"
               label="Password"
@@ -81,31 +101,35 @@ export const LoginPage = () => {
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, textTransform: "none" }}
+              disabled={isLoginLoading}
             >
+              {isLoginLoading && (
+                <CircularProgress size="20px" sx={{ mr: "10px" }} />
+              )}
               Sign In
             </Button>
             <Grid container>
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
-                </Link>
+                <Link variant="body2">{"Don't have an account? Sign Up"}</Link>
               </Grid>
             </Grid>
 
-            <Grid container>
-              <Grid item>
-                <Button type="button" fullWidth variant="contained">
-                  <img
-                    src="https://developers.google.com/identity/images/g-logo.png"
-                    alt="Google Logo"
-                    width="20"
-                    style={{ marginRight: "10px" }}
-                  />
-                  Login with Google
-                </Button>
-              </Grid>
-            </Grid>
+            <Button
+              fullWidth
+              variant="outlined"
+              sx={{ mt: 3, mb: 2 }}
+              onClick={() => loginWithPopup()}
+              disabled={isGoogleAuthenticating}
+            >
+              {isGoogleAuthenticating && (
+                <CircularProgress size="20px" sx={{ mr: "10px" }} />
+              )}
+              <GoogleIcon width="20px" height="20px" />
+              <Typography sx={{ ml: "10px", textTransform: "none" }}>
+                Continue with Google
+              </Typography>
+            </Button>
           </Box>
         </Box>
       </Container>

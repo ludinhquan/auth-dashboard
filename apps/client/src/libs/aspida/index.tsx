@@ -1,4 +1,5 @@
 import api from "@/api/$api";
+import { getConfig } from "@/config";
 import aspida from "@aspida/axios";
 import Axios from "axios";
 
@@ -18,7 +19,7 @@ axios.interceptors.response.use(
 
 export const aspidaClient = api(
   aspida(axios, {
-    baseURL: import.meta.env.VITE_BASE_URL,
+    baseURL: getConfig().apiEndpoint,
     withCredentials: true,
   }),
 );

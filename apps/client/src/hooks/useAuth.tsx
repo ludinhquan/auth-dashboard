@@ -4,6 +4,7 @@ import { useCallback } from "react";
 
 const isAuthenticatedAtom = atom(false);
 const isAuthenticatingAtom = atom(true);
+const isLoginLoadingAtom = atom(false);
 const userAtom = atom(null);
 
 const sleep = (timeout = 0) => new Promise((res) => setTimeout(res, timeout));
@@ -11,6 +12,7 @@ const sleep = (timeout = 0) => new Promise((res) => setTimeout(res, timeout));
 export const useAuth = () => {
   const [isAuthenticating, setIsAuthenticating] = useAtom(isAuthenticatingAtom);
   const [isAuthenticated, setIsAuthenticated] = useAtom(isAuthenticatedAtom);
+  const [isLoginLoading, setIsLoginLoading] = useAtom(isLoginLoadingAtom);
   const [user, setUser] = useAtom(userAtom);
 
   const getMe = useCallback(async () => {
@@ -21,18 +23,32 @@ export const useAuth = () => {
       setIsAuthenticated(true);
       setUser(user);
     } catch (e) {
-      console.log("login error", e);
+      console.log((e as Error).message);
     }
 
     setIsAuthenticating(false);
   }, [setIsAuthenticated, setIsAuthenticating, setUser]);
 
-  const login = useCallback(
-    async (data: { email: string; password: string }) => {
-      await aspidaClient.login.post({ body: data });
+  const loginWithGoogle = useCallback(
+    async (data: { token: string }) => {
+      await aspidaClient.google_authentication.post({ body: data });
       await getMe();
     },
     [getMe],
+  );
+
+  const login = useCallback(
+    async (data: { email: string; password: string }) => {
+      try {
+        setIsLoginLoading(true);
+        await aspidaClient.login.post({ body: data });
+        await getMe();
+      } catch (e) {
+        console.log((e as Error).message);
+      }
+      setIsLoginLoading(false);
+    },
+    [getMe, setIsLoginLoading],
   );
 
   const logout = useCallback(async () => {
@@ -41,5 +57,16 @@ export const useAuth = () => {
     setUser(null);
   }, [setIsAuthenticated, setUser]);
 
-  return { isAuthenticating, isAuthenticated, user, getMe, login, logout };
+  return {
+    isAuthenticating,
+    isAuthenticated,
+    isLoginLoading,
+    user,
+
+    // Method for auth
+    getMe,
+    login,
+    loginWithGoogle,
+    logout,
+  };
 };
