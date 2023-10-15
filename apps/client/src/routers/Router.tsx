@@ -54,6 +54,7 @@ const Routers = () => {
       </Route>
       <Route element={<ProtectedRoute />}>
         <Route path={ROUTE_CONFIG.HOME.PATH} element={<HomePage />} />
+        <Route path={ROUTE_CONFIG.PROFILE.PATH} element={"Profile"} />
       </Route>
       <Route path="*" element={<Navigate to={ROUTE_CONFIG.HOME.PATH} />} />
     </Routes>

@@ -10,11 +10,16 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import { useAuth } from "@/hooks";
+import { useNavigate } from "react-router-dom";
+import { ROUTE_CONFIG } from "@/routers/config";
 
 const pages: string[] = [];
-const settings = ["Profile", "Logout"];
 
 export const Header = () => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null,
   );
@@ -33,6 +38,17 @@ export const Header = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const settings = [
+    {
+      title: "Profile",
+      action: () => navigate(ROUTE_CONFIG.PROFILE.PATH),
+    },
+    {
+      title: "Logout",
+      action: logout,
+    },
+  ];
 
   return (
     <AppBar position="static">
@@ -135,8 +151,15 @@ export const Header = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem
+                  key={setting.title}
+                  onClick={() =>
+                    typeof setting.action === "function"
+                      ? setting.action()
+                      : null
+                  }
+                >
+                  <Typography textAlign="center">{setting.title}</Typography>
                 </MenuItem>
               ))}
             </Menu>
