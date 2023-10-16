@@ -1,6 +1,6 @@
 export type Result<T, E = undefined, D = undefined> =
   | { ok: true; fail: false; value: T }
-  | { ok: false; fail: true; error: E | undefined; errorDetail: D | undefined };
+  | { ok: false; fail: true; error: E | undefined; detail: D | undefined };
 
 export const Ok = <T>(data: T): Result<T, never> => ({
   ok: true,
@@ -8,9 +8,9 @@ export const Ok = <T>(data: T): Result<T, never> => ({
   value: data,
 });
 
-export const Err = <E, D>(error?: E, errorDetail?: D): Result<never, E, D> => ({
+export const Err = <E, D>(error?: E, detail?: D): Result<never, E, D> => ({
   ok: false,
   fail: true,
   error,
-  errorDetail,
+  detail,
 });

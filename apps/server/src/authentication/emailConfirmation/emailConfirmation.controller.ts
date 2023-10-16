@@ -37,6 +37,6 @@ export class EmailConfirmationController {
     );
     if (result.ok) return result.value;
 
-    return new BadRequestError(result.error!, result.errorDetail);
+    return new BadRequestError(result.error!, result.detail);
   }
 }

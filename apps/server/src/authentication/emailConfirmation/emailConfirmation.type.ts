@@ -11,4 +11,11 @@ export enum ConfirmEmailError {
   BadRequest = 'BadRequest',
 }
 
-export type T = Result<boolean, ConfirmEmailError>;
+export enum ResendEmailError {
+  EmailAlreadyConfirmed = 'EmailAlreadyConfirmed',
+  TooManyAttempts = 'TooManyAttempts',
+}
+
+export type TConfirmEmailRes = Result<boolean, ConfirmEmailError>;
+
+export type TResendEmailRes = Result<boolean, ResendEmailError>;

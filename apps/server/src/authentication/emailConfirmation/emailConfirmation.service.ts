@@ -5,6 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 
 import {
   ConfirmEmailError,
+  ResendEmailError,
   VerificationTokenPayload,
 } from './emailConfirmation.type';
 
@@ -51,7 +52,7 @@ export class EmailConfirmationService {
     const user = userResult.value;
 
     if (user.isEmailConfirmed)
-      return Err(ConfirmEmailError.EmailAlreadyConfirmed);
+      return Err(ResendEmailError.EmailAlreadyConfirmed);
 
     const resendTimeConfig = Number(
       this.configService.get('EMAIL_VERIFICATION_TIME_RESEND'),
@@ -60,22 +61,19 @@ export class EmailConfirmationService {
     const timeRemaining = Math.floor(
       resendTimeConfig -
         (new Date().getTime() -
-          new Date(
-            user.lastTimeSendEmailConfirmation ?? new Date(),
-          ).getTime()) /
+          new Date(user.lastTimeSendEmailConfirmation!).getTime()) /
           1000,
     );
 
     if (timeRemaining >= 0)
-      return Err('TooManyRequests', {
+      return Err(ResendEmailError.TooManyAttempts, {
         lastTimeSendEmailConfirmation: user.lastTimeSendEmailConfirmation,
         resendTimeConfig,
       });
 
+    this.sendVerificationLink(user.email);
     const updateResult =
       await this.usersService.updateTimeResendEmailConfirmation(user.email);
-
-    this.sendVerificationLink(user.email);
 
     return Ok({
       lastTimeSendEmailConfirmation: updateResult.lastTimeSendEmailConfirmation,
