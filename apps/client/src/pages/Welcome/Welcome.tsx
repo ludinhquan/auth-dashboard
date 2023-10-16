@@ -25,7 +25,7 @@ export const WelcomePage = () => {
       snackbar({ message: "Too Many Attempts", severity: "error" });
 
       setTimeRemaining(
-        getTimeRemaining((e as any).response.data.errors[0].data),
+        getTimeRemaining((e as any).response?.data?.errors?.[0]?.data),
       );
     }
   };

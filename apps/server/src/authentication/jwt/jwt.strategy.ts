@@ -1,3 +1,4 @@
+import { UnauthorizedError } from '@lib/core';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
@@ -27,7 +28,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: TTokenPayload) {
     const userResult = await this.userService.getById(payload.userId);
 
-    if (userResult.fail) return userResult;
+    if (userResult.fail) throw new UnauthorizedError("User dosen't exists");
 
     userResult.value.password = null;
 

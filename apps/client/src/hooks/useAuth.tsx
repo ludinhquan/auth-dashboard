@@ -82,6 +82,10 @@ export const useAuth = () => {
     setUser(null);
   }, [setIsAuthenticated, setUser]);
 
+  const updateUserName = (name: string) => {
+    setUser({ ...user, name } as UserDto);
+  };
+
   return {
     isAuthenticating,
     isAuthenticated,
@@ -90,6 +94,7 @@ export const useAuth = () => {
 
     // Method for auth
     getMe,
+    updateUserName,
     register,
     login,
     loginWithGoogle,

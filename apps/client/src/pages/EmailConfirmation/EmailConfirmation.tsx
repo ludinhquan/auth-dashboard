@@ -25,7 +25,7 @@ export const EmailConfirmation = () => {
       await getMe();
       setVerified(true);
     } catch (e) {
-      setError((e as any).response.data.errors[0].message);
+      setError((e as any).response?.data?.errors?.[0]?.message);
       setVerified(false);
     }
 

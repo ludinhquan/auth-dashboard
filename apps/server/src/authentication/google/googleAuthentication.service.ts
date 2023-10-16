@@ -38,8 +38,8 @@ export class GoogleAuthenticationService {
     });
   }
 
-  async registerUser(email: string, name: string) {
-    const createResult = await this.usersService.createWithGoogle(email, name);
+  async registerUser(data: { email: string; name: string; avatar: string }) {
+    const createResult = await this.usersService.createWithGoogle(data);
     if (createResult.fail) return createResult;
 
     const user = createResult.value;
@@ -50,11 +50,12 @@ export class GoogleAuthenticationService {
     try {
       const tokenInfo = await this.oauthClient.getUserInfo(token);
 
-      const { email, name } = tokenInfo.data;
+      const { email, name, picture: avatar } = tokenInfo.data;
 
       const userResult = await this.usersService.getByEmail(email);
 
-      if (userResult.fail) return this.registerUser(email, name);
+      if (userResult.fail)
+        return this.registerUser({ email, name, avatar: avatar as string });
 
       return this.handleRegisteredUser(userResult.value);
     } catch (error) {

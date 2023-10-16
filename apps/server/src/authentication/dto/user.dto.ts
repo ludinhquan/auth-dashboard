@@ -11,6 +11,9 @@ export class UserDto {
   name: string;
 
   @ApiProperty()
+  avatar: string;
+
+  @ApiProperty()
   isEmailConfirmed: boolean;
 
   @ApiProperty()

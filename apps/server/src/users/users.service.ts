@@ -38,14 +38,14 @@ export class UsersService {
     return Ok(newUser);
   }
 
-  async createWithGoogle(
-    email: string,
-    name: string,
-  ): Promise<TCreateUserWithGoogleRes> {
+  async createWithGoogle(createData: {
+    email: string;
+    name: string;
+    avatar: string;
+  }): Promise<TCreateUserWithGoogleRes> {
     const newUser = await this.prisma.user.create({
       data: {
-        email,
-        name,
+        ...createData,
         isRegisteredWithGoogle: true,
         isEmailConfirmed: true,
       },

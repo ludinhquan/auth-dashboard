@@ -27,6 +27,11 @@ export class AuthenticationService {
     private emailConfirmationService: EmailConfirmationService,
   ) {}
 
+  private getName(email: string) {
+    const match = email.match(/^(.*)@/);
+    return match?.[1] ?? '';
+  }
+
   public async register(registrationData: RegisterDto): Promise<TRegisterRes> {
     const invalidPassword = Password.validate(registrationData.password);
 
@@ -40,7 +45,9 @@ export class AuthenticationService {
     if (existed) return Err(RegisterError.UserAlreadyExist);
 
     const hashedPassword = await Password.hash(registrationData.password);
+    const name = this.getName(registrationData.email);
     const createdUserResult = await this.usersService.create({
+      name,
       ...registrationData,
       password: hashedPassword,
     });
@@ -106,10 +113,14 @@ export class AuthenticationService {
     });
     if (!user) return Err(AuthError.WrongCredentialsProvided);
 
+    if (user.isRegisteredWithGoogle)
+      return Err(AuthError.WrongCredentialsProvided);
+
     const isOldPasswordMatch = await Password.compare(
       oldPassword,
-      user.password!,
+      user.password ?? '',
     );
+
     if (!isOldPasswordMatch) return Err(AuthError.WrongCredentialsProvided);
 
     const invalidPassword = Password.validate(newPassword);

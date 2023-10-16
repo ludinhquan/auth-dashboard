@@ -5,11 +5,10 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
-import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { useAuth } from "@/hooks";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_CONFIG } from "@/routers/config";
@@ -17,7 +16,7 @@ import { ROUTE_CONFIG } from "@/routers/config";
 const pages: string[] = [];
 
 export const Header = () => {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -45,6 +44,10 @@ export const Header = () => {
       action: () => navigate(ROUTE_CONFIG.PROFILE.PATH),
     },
     {
+      title: "Settings",
+      action: () => navigate(ROUTE_CONFIG.SETTING.PATH),
+    },
+    {
       title: "Logout",
       action: logout,
     },
@@ -52,8 +55,8 @@ export const Header = () => {
 
   return (
     <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
+      <Box sx={{ mr: "10px", ml: "10px" }}>
+        <Toolbar>
           <Typography
             variant="h6"
             noWrap
@@ -61,9 +64,6 @@ export const Header = () => {
             href="/"
             sx={{
               mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
               color: "inherit",
               textDecoration: "none",
             }}
@@ -97,24 +97,6 @@ export const Header = () => {
               ))}
             </Menu>
           </Box>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
@@ -128,11 +110,19 @@ export const Header = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" />
-              </IconButton>
-            </Tooltip>
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Avatar
+                  alt={user!.name}
+                  src={user!.avatar}
+                  sx={{ width: 36, height: 36 }}
+                />
+                <Typography sx={{ ml: "10px", color: "#fafafa" }}>
+                  {user!.name}
+                </Typography>
+                <ArrowDropDownIcon sx={{ color: "#fafafa" }} />
+              </Box>
+            </IconButton>
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"
@@ -164,7 +154,7 @@ export const Header = () => {
             </Menu>
           </Box>
         </Toolbar>
-      </Container>
+      </Box>
     </AppBar>
   );
 };

@@ -25,20 +25,13 @@ export const useValidateForm = (props: { isLoginMode: boolean }) => {
     if (isLoginMode) return formData;
 
     const validateEmailResult = validateEmail(email);
-    if (validateEmailResult) {
-      newErrors.email = validateEmailResult[0];
-    }
+    if (validateEmailResult) newErrors.email = validateEmailResult[0];
 
     const validatePasswordResult = validatePassword(password);
-    if (validatePasswordResult) {
-      newErrors.password = validatePasswordResult[0];
-    }
+    if (validatePasswordResult) newErrors.password = validatePasswordResult[0];
 
-    console.log("password:", password);
-    console.log("confirmPassword:", confirmPassword);
-    if (password !== confirmPassword) {
+    if (password !== confirmPassword)
       newErrors.confirmPassword = "Passwords do not match";
-    }
 
     setErrors(newErrors);
 

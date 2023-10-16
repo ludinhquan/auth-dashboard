@@ -16,6 +16,7 @@ import { Layout } from "@/components/Layout";
 import { Profile } from "@/pages/Profile";
 import { WelcomePage } from "@/pages/Welcome";
 import { EmailConfirmation } from "@/pages/EmailConfirmation";
+import { SettingPage } from "@/pages/Settings";
 
 export const Router = () => {
   return (
@@ -67,6 +68,7 @@ const Routers = () => {
       <Route element={<ProtectedRoute />}>
         <Route path={ROUTE_CONFIG.HOME.PATH} element={<HomePage />} />
         <Route path={ROUTE_CONFIG.PROFILE.PATH} element={<Profile />} />
+        <Route path={ROUTE_CONFIG.SETTING.PATH} element={<SettingPage />} />
       </Route>
       <Route path="*" element={<Navigate to={ROUTE_CONFIG.HOME.PATH} />} />
     </Routes>
