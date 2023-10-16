@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "@app/client",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -15,7 +15,10 @@
     "@auth0/auth0-react": "^2.2.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@lib/core": "workspace:^",
+    "@mui/icons-material": "^5.14.13",
     "@mui/material": "^5.14.13",
+    "aspida": "^1.14.0",
     "axios": "^1.5.1",
     "jotai": "^2.4.3",
     "react": "^18.2.0",

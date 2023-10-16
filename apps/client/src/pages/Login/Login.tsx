@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -14,17 +14,31 @@ import { ROUTE_CONFIG } from "@/routers/config";
 import { GoogleIcon } from "@/components/Icons";
 import { useGoogleAuth } from "@/hooks/useGoogleAuth0";
 import { CircularProgress } from "@mui/material";
+import { useValidateForm } from "./useValidateForm";
+import { PasswordInput } from "./PasswordInput";
 
 const defaultTheme = createTheme();
 
+enum FormMode {
+  Login = "login",
+  Register = "register",
+}
+
 export const LoginPage = () => {
-  const { isAuthenticated, isLoginLoading, login, loginWithGoogle } = useAuth();
+  const { isAuthenticated, isLoginLoading, login, loginWithGoogle, register } =
+    useAuth();
   const {
     isLoading: isGoogleAuthenticating,
     isAuthenticated: isSocialAuthenticated,
     loginWithPopup,
     getAuthToken,
   } = useGoogleAuth();
+
+  const [formMode, setFormMode] = useState(FormMode.Login);
+  const isLoginMode = formMode === FormMode.Login;
+
+  const { errors, validate } = useValidateForm({ isLoginMode });
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -44,14 +58,25 @@ export const LoginPage = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const data = new FormData(event.currentTarget);
+    const data = validate(new FormData(event.currentTarget));
+    if (!data) return;
 
-    const body = {
-      email: data.get("email") as string,
-      password: data.get("password") as string,
+    const handlers = {
+      [FormMode.Login]: login,
+      [FormMode.Register]: register,
     };
 
-    await login(body);
+    try {
+      await handlers[formMode](data);
+    } catch (e) {
+      console.log({ e });
+    }
+  };
+
+  const switchFormMode = () => {
+    setFormMode((prevMode) =>
+      prevMode === FormMode.Login ? FormMode.Register : FormMode.Login,
+    );
   };
 
   return (
@@ -67,7 +92,10 @@ export const LoginPage = () => {
           }}
         >
           <Typography component="h1" variant="h5">
-            Sign in
+            Welcome
+          </Typography>
+          <Typography component="p" variant="h5" fontSize="16px">
+            {isLoginMode ? "Login to continue" : "Sign up to continue"}
           </Typography>
           <Box
             component="form"
@@ -85,8 +113,10 @@ export const LoginPage = () => {
               name="email"
               autoComplete="email"
               autoFocus
+              error={!!errors.email}
+              helperText={errors.email}
             />
-            <TextField
+            <PasswordInput
               margin="normal"
               required
               size="small"
@@ -96,7 +126,24 @@ export const LoginPage = () => {
               type="password"
               id="password"
               autoComplete="current-password"
+              error={!!errors.password}
+              helperText={errors.password}
             />
+            {!isLoginMode && (
+              <PasswordInput
+                margin="normal"
+                required
+                size="small"
+                fullWidth
+                name="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                error={!!errors.confirmPassword}
+                helperText={errors.confirmPassword}
+              />
+            )}
             <Button
               type="submit"
               fullWidth
@@ -107,14 +154,26 @@ export const LoginPage = () => {
               {isLoginLoading && (
                 <CircularProgress size="20px" sx={{ mr: "10px" }} />
               )}
-              Sign In
+              Continue
             </Button>
             <Grid container>
               <Grid item>
-                <Link variant="body2">{"Don't have an account? Sign Up"}</Link>
+                <Typography>
+                  {isLoginMode
+                    ? "Don't have an account? "
+                    : "Already have an account? "}
+                  <Link
+                    onClick={switchFormMode}
+                    sx={{
+                      ":hover": { cursor: "pointer" },
+                      textDecoration: "none",
+                    }}
+                  >
+                    {isLoginMode ? "Sign up" : "Login"}
+                  </Link>
+                </Typography>
               </Grid>
             </Grid>
-
             <Button
               fullWidth
               variant="outlined"

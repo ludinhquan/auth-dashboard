@@ -13,5 +13,16 @@
     "paths": {
       "@lib/core": ["./packages/core/dist"]
     }
-  }
+  },
+  "references": [
+    {
+      "path": "packages/core/tsconfig.json"
+    },
+    {
+      "path": "apps/client/tsconfig.json"
+    },
+    {
+      "path": "apps/server/tsconfig.json"
+    }
+  ]
 }

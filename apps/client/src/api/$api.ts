@@ -11,7 +11,7 @@ import type { Methods as Methods_1i354bd } from './reset-password';
 import type { Methods as Methods_tli9od } from './user';
 
 const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
-  const prefix = (baseURL === undefined ? 'http://localhost:4000}' : baseURL).replace(/\/$/, '');
+  const prefix = (baseURL === undefined ? 'http://localhost:4000' : baseURL).replace(/\/$/, '');
   const PATH0 = '/email-confirmation/confirm';
   const PATH1 = '/email-confirmation/resend-confirmation-link';
   const PATH2 = '/google-authentication';
@@ -66,9 +66,9 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
     },
     me: {
       get: (option?: { config?: T | undefined } | undefined) =>
-        fetch<void, BasicHeaders, Methods_1uc1f5c['get']['status']>(prefix, PATH5, GET, option).send(),
+        fetch<Methods_1uc1f5c['get']['resBody'], BasicHeaders, Methods_1uc1f5c['get']['status']>(prefix, PATH5, GET, option).json(),
       $get: (option?: { config?: T | undefined } | undefined) =>
-        fetch<void, BasicHeaders, Methods_1uc1f5c['get']['status']>(prefix, PATH5, GET, option).send().then(r => r.body),
+        fetch<Methods_1uc1f5c['get']['resBody'], BasicHeaders, Methods_1uc1f5c['get']['status']>(prefix, PATH5, GET, option).json().then(r => r.body),
       $path: () => `${prefix}${PATH5}`,
     },
     ping: {

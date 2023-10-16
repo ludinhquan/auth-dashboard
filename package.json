@@ -1,13 +1,15 @@
 {
-  "name": "aha-exam",
+  "name": "auth-dashboard",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "pnpm run --parallel dev",
-    "build": "pnpm run --parallel build",
-    "svr": "pnpm --filter server",
-    "client": "pnpm --filter client"
+    "preinstall": "npx only-allow pnpm",
+    "core": "pnpm --filter '@lib/core'",
+    "svr": "pnpm --filter '@app/server'",
+    "client": "pnpm --filter '@app/client'",
+    "build": "pnpm core build && pnpm svr build && pnpm client build",
+    "dev": "pnpm core build  && pnpm run --filter '@app*' --parallel dev"
   },
   "keywords": [],
   "author": "ludinhquan@gmail.com",

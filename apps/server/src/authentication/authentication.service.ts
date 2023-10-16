@@ -40,18 +40,22 @@ export class AuthenticationService {
     if (existed) return Err(RegisterError.UserAlreadyExist);
 
     const hashedPassword = await Password.hash(registrationData.password);
-
-    const createdUser = await this.usersService.create({
+    const createdUserResult = await this.usersService.create({
       ...registrationData,
       password: hashedPassword,
     });
 
-    if (createdUser.ok)
-      this.emailConfirmationService.sendVerificationLink(
-        registrationData.email,
-      );
+    if (createdUserResult.fail) return createdUserResult;
 
-    return createdUser;
+    this.emailConfirmationService.sendVerificationLink(registrationData.email);
+
+    const user = createdUserResult.value;
+    const accessTokenCookie = this.getCookieWithJwtAccessToken(
+      user.id,
+      user.isRegisteredWithGoogle!,
+    );
+
+    return Ok({ accessTokenCookie, user });
   }
 
   public async getAuthenticatedUser(

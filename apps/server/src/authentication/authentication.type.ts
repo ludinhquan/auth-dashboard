@@ -15,7 +15,10 @@ export type TTokenPayload = {
   isEmailConfirmed?: boolean;
 };
 
-export type TRegisterRes = Result<User, RegisterError>;
+export type TRegisterRes = Result<
+  { user: User; accessTokenCookie: string },
+  RegisterError
+>;
 
 export type TLoginRes = Result<User, AuthError>;
 

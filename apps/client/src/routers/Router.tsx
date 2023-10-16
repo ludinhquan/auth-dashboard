@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { LoadingPage } from "@/pages/Loading/Loading";
 import { Layout } from "@/components/Layout";
 import { Profile } from "@/pages/Profile";
+import { EmailVerification } from "@/pages/EmailVerification";
 
 export const Router = () => {
   return (
@@ -24,10 +25,12 @@ export const Router = () => {
 };
 
 const ProtectedRoute = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   if (!isAuthenticated)
     return <Navigate to={ROUTE_CONFIG.LOGIN.PATH} replace />;
+
+  if (!user?.isEmailConfirmed) return <EmailVerification />;
 
   return <Layout />;
 };

@@ -1,19 +1,16 @@
 import { defineConfig } from "vite";
-import { fileURLToPath, URL } from "url";
+import { resolve } from "path";
 import react from "@vitejs/plugin-react-swc";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   optimizeDeps: {
     include: ["@emotion/styled"],
   },
   resolve: {
-    alias: [
-      {
-        find: "@",
-        replacement: fileURLToPath(new URL("./src", import.meta.url)),
-      },
-    ],
+    alias: {
+      "@lib/core": resolve(__dirname, "../../packages/core/src"),
+      "@": resolve(__dirname, "./src"),
+    },
   },
 });

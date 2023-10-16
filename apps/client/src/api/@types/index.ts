@@ -1,7 +1,13 @@
 /* eslint-disable */
 export type RegisterDto = {
+}
+
+export type UserDto = {
+  id: string
   email: string
-  password: string
+  name: string
+  isEmailConfirmed: boolean
+  isRegisteredWithGoogle: boolean
 }
 
 export type UpdatePasswordDto = {

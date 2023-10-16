@@ -8,13 +8,14 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { ApiOkResponse, ApiResponse, getSchemaPath } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { Request } from 'express';
 
 import { CurrentUser } from '../decorators';
 
 import { AuthenticationService } from './authentication.service';
-import { RegisterDto, UpdatePasswordDto } from './dto';
+import { RegisterDto, UpdatePasswordDto, UserDto } from './dto';
 import { JwtAuthenticationGuard } from './jwt';
 import { LocalAuthenticationGuard } from './local';
 
@@ -23,14 +24,18 @@ export class AuthenticationController {
   constructor(private authenticationService: AuthenticationService) {}
 
   @Post('register')
-  async register(@Body() registrationData: RegisterDto) {
+  async register(@Body() registrationData: RegisterDto, @Req() req: Request) {
     try {
       const registerResult =
         await this.authenticationService.register(registrationData);
 
-      if (registerResult.ok) return registerResult.value;
+      if (registerResult.fail)
+        return new BadRequestError(registerResult.error as string);
+      const { user, accessTokenCookie } = registerResult.value;
 
-      return new BadRequestError(registerResult.error as string);
+      req.res?.setHeader('Set-Cookie', [accessTokenCookie]);
+
+      return user;
     } catch (error) {
       return new InternalServerError(error.message);
     }
@@ -67,7 +72,7 @@ export class AuthenticationController {
     );
   }
 
-  @HttpCode(200)
+  @ApiOkResponse({ status: 200, type: UserDto })
   @UseGuards(JwtAuthenticationGuard)
   @Get('me')
   async getProfile(@CurrentUser() user: User) {

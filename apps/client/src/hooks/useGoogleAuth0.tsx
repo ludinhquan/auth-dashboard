@@ -15,7 +15,7 @@ export const useGoogleAuth = () => {
   } = useAuth0();
 
   const loginWithPopup = (connection = Connection.Google) => {
-    auth0.loginWithRedirect({
+    auth0.loginWithPopup({
       authorizationParams: { connection },
     });
   };

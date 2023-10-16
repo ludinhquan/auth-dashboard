@@ -1,4 +1,4 @@
-import { CustomError, removeEmptyProps } from '@lib/core';
+import { CustomError } from '@lib/core';
 import {
   CallHandler,
   ExecutionContext,
@@ -26,14 +26,12 @@ export class HttpInterceptor implements NestInterceptor {
 
     const last = performance.now();
 
-    const { method, params, body, query } = request;
+    const { method, params, query } = request;
 
     const client = this.getClient(request);
 
     this.logger.log(
-      `[REQUEST][${method}] ${client} ${JSON.stringify(
-        removeEmptyProps({ params, query, body }, [undefined]),
-      )}`,
+      `[REQUEST][${method}] ${client} ${JSON.stringify({ params, query })}`,
     );
 
     response.on('finish', () => {

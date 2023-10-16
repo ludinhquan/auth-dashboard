@@ -1,6 +1,7 @@
 import { Auth0Provider, Auth0ProviderOptions } from "@auth0/auth0-react";
 import { getConfig } from "./config";
 import { Router } from "./routers";
+import { SnackbarProvider } from "./hooks";
 
 const config = getConfig();
 
@@ -16,8 +17,10 @@ const providerConfig: Auth0ProviderOptions = {
 
 export const App = () => {
   return (
-    <Auth0Provider {...providerConfig}>
-      <Router />
-    </Auth0Provider>
+    <SnackbarProvider>
+      <Auth0Provider {...providerConfig}>
+        <Router />
+      </Auth0Provider>
+    </SnackbarProvider>
   );
 };
