@@ -2,6 +2,7 @@ import { CustomError } from '@lib/core';
 import {
   CallHandler,
   ExecutionContext,
+  HttpException,
   Injectable,
   Logger,
   NestInterceptor,
@@ -50,7 +51,10 @@ export class HttpInterceptor implements NestInterceptor {
 
     return handler.handle().pipe(
       map((data: unknown) => {
-        if (data instanceof CustomError) throw data;
+        if (data instanceof CustomError)
+          throw new HttpException(data.toJson(), data.statusCode, {
+            cause: data.toJson(),
+          });
         return data;
       }),
     );

@@ -37,9 +37,9 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
       },
       resend_confirmation_link: {
         post: (option?: { config?: T | undefined } | undefined) =>
-          fetch<void, BasicHeaders, Methods_1cszvff['post']['status']>(prefix, PATH1, POST, option).send(),
+          fetch<Methods_1cszvff['post']['resBody'], BasicHeaders, Methods_1cszvff['post']['status']>(prefix, PATH1, POST, option).json(),
         $post: (option?: { config?: T | undefined } | undefined) =>
-          fetch<void, BasicHeaders, Methods_1cszvff['post']['status']>(prefix, PATH1, POST, option).send().then(r => r.body),
+          fetch<Methods_1cszvff['post']['resBody'], BasicHeaders, Methods_1cszvff['post']['status']>(prefix, PATH1, POST, option).json().then(r => r.body),
         $path: () => `${prefix}${PATH1}`,
       },
     },

@@ -32,14 +32,14 @@ export class EmailConfirmationService {
 
     const token = this.jwtService.sign(payload, options);
 
-    const host = this.configService.get('CLIENT_URL');
+    const host = this.configService.get('EMAIL_VERIFICATION_URL');
     const url = `${host}?token=${token}`;
 
     const text = `Welcome to the application. To confirm the email address, click here: ${url}`;
 
     return this.emailService.send({
       to: email,
-      subject: 'Email confirmation',
+      subject: 'Verify your account | Auth Dashboard',
       text,
     });
   }
@@ -53,9 +53,34 @@ export class EmailConfirmationService {
     if (user.isEmailConfirmed)
       return Err(ConfirmEmailError.EmailAlreadyConfirmed);
 
+    const resendTimeConfig = Number(
+      this.configService.get('EMAIL_VERIFICATION_TIME_RESEND'),
+    );
+
+    const timeRemaining = Math.floor(
+      resendTimeConfig -
+        (new Date().getTime() -
+          new Date(
+            user.lastTimeSendEmailConfirmation ?? new Date(),
+          ).getTime()) /
+          1000,
+    );
+
+    if (timeRemaining >= 0)
+      return Err('TooManyRequests', {
+        lastTimeSendEmailConfirmation: user.lastTimeSendEmailConfirmation,
+        resendTimeConfig,
+      });
+
+    const updateResult =
+      await this.usersService.updateTimeResendEmailConfirmation(user.email);
+
     this.sendVerificationLink(user.email);
 
-    return Ok(true);
+    return Ok({
+      lastTimeSendEmailConfirmation: updateResult.lastTimeSendEmailConfirmation,
+      resendTimeConfig,
+    });
   }
 
   public async confirmEmail(email: string) {

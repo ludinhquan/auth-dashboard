@@ -19,7 +19,7 @@ const snackbarAtom = atom<SnackbarContextType>({
 export const useSnackbar = () => {
   const [, setSnackbarData] = useAtom(snackbarAtom);
   const updateSnackbar = useCallback(
-    (data: { message: string; severity: AlertColor; description: string }) =>
+    (data: { message: string; severity: AlertColor; description?: string }) =>
       setSnackbarData({ ...data, open: true }),
     [setSnackbarData],
   );

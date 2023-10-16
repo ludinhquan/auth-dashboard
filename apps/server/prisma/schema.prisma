@@ -17,4 +17,5 @@ model User {
   password               String?
   isRegisteredWithGoogle Boolean?
   isEmailConfirmed       Boolean?
+  lastTimeSendEmailConfirmation DateTime?
 }

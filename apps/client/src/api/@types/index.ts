@@ -19,5 +19,10 @@ export type UpdateUserDto = {
 export type ConfirmEmailDto = {
 }
 
+export type ResendEmailResponseDto = {
+  lastTimeSendEmailConfirmation: string
+  resendTimeConfig: number
+}
+
 export type TokenVerificationDto = {
 }

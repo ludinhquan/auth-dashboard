@@ -67,4 +67,11 @@ export class UsersService {
       data: { isEmailConfirmed: true },
     });
   }
+
+  async updateTimeResendEmailConfirmation(email: string) {
+    return await this.prisma.user.update({
+      where: { email },
+      data: { lastTimeSendEmailConfirmation: new Date() },
+    });
+  }
 }
