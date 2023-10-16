@@ -15,4 +15,7 @@ export class UserDto {
 
   @ApiProperty()
   isRegisteredWithGoogle: boolean;
+
+  @ApiProperty()
+  lastTimeSendEmailConfirmation: Date;
 }

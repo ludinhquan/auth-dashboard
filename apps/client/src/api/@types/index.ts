@@ -8,6 +8,7 @@ export type UserDto = {
   name: string
   isEmailConfirmed: boolean
   isRegisteredWithGoogle: boolean
+  lastTimeSendEmailConfirmation: string
 }
 
 export type UpdatePasswordDto = {
@@ -17,6 +18,7 @@ export type UpdateUserDto = {
 }
 
 export type ConfirmEmailDto = {
+  token: string
 }
 
 export type ResendEmailResponseDto = {

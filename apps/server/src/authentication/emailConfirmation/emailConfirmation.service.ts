@@ -58,11 +58,12 @@ export class EmailConfirmationService {
       this.configService.get('EMAIL_VERIFICATION_TIME_RESEND'),
     );
 
+    const timeRemainingInMilliseconds =
+      new Date().getTime() -
+      new Date(user.lastTimeSendEmailConfirmation!).getTime();
+
     const timeRemaining = Math.floor(
-      resendTimeConfig -
-        (new Date().getTime() -
-          new Date(user.lastTimeSendEmailConfirmation!).getTime()) /
-          1000,
+      resendTimeConfig - timeRemainingInMilliseconds / 1000,
     );
 
     if (timeRemaining >= 0)
@@ -72,6 +73,7 @@ export class EmailConfirmationService {
       });
 
     this.sendVerificationLink(user.email);
+
     const updateResult =
       await this.usersService.updateTimeResendEmailConfirmation(user.email);
 

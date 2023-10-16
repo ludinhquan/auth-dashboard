@@ -1,34 +1,32 @@
 import { ResendEmailResponseDto } from "@/api/@types";
-import { useSnackbar } from "@/hooks";
-import { useCountDown } from "@/hooks/useCountdown";
+import { useSnackbar, useCountDown } from "@/hooks";
 import { aspidaClient } from "@/libs/aspida";
 import { Box, Button, Typography } from "@mui/material";
 
-export const EmailVerification = () => {
+export const WelcomePage = () => {
   const { timeRemaining, setTimeRemaining } = useCountDown(0);
   const snackbar = useSnackbar();
 
-  const handleCountdownTime = (data: ResendEmailResponseDto) => {
+  const getTimeRemaining = (data: ResendEmailResponseDto) => {
     const { lastTimeSendEmailConfirmation, resendTimeConfig } = data;
 
-    setTimeRemaining(
-      Math.floor(
-        resendTimeConfig -
-          (new Date().getTime() -
-            new Date(lastTimeSendEmailConfirmation).getTime()) /
-            1000,
-      ),
-    );
+    const timeRemainingInMilliseconds =
+      new Date().getTime() - new Date(lastTimeSendEmailConfirmation).getTime();
+
+    return Math.floor(resendTimeConfig - timeRemainingInMilliseconds / 1000);
   };
 
   const resendConfirmationLink = async () => {
     try {
       const result =
         await aspidaClient.email_confirmation.resend_confirmation_link.post();
-      handleCountdownTime(result.body);
+      setTimeRemaining(getTimeRemaining(result.body));
     } catch (e) {
-      snackbar({ message: "Too Many Requests", severity: "error" });
-      handleCountdownTime((e as any).response.data.errors[0].data);
+      snackbar({ message: "Too Many Attempts", severity: "error" });
+
+      setTimeRemaining(
+        getTimeRemaining((e as any).response.data.errors[0].data),
+      );
     }
   };
 
@@ -58,7 +56,9 @@ export const EmailVerification = () => {
           onClick={resendConfirmationLink}
           disabled={timeRemaining > 0}
         >
-          Resend Email Verification {timeRemaining > 0 && `${timeRemaining}s`}
+          {timeRemaining > 0
+            ? `Continue in ${timeRemaining}s`
+            : "Resend Email Verification"}
         </Button>
       </Box>
     </Box>

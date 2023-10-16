@@ -1,4 +1,4 @@
-import { BadRequestError } from '@lib/core';
+import { BadRequestError, TooManyAttemptsError } from '@lib/core';
 import { Controller, Post, Body } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { User } from '@prisma/client';
@@ -8,6 +8,7 @@ import {
   ResendEmailResponseDto,
 } from './emailConfirmation.dto';
 import { EmailConfirmationService } from './emailConfirmation.service';
+import { ResendEmailError } from './emailConfirmation.type';
 
 import { Authentication, CurrentUser } from '@/decorators';
 
@@ -23,7 +24,7 @@ export class EmailConfirmationController {
       confirmationData.token,
     );
 
-    if (result.ok) return result.value;
+    if (result.ok) return;
 
     return new BadRequestError(result.error!);
   }
@@ -36,6 +37,9 @@ export class EmailConfirmationController {
       user.id,
     );
     if (result.ok) return result.value;
+
+    if (result.error === ResendEmailError.TooManyAttempts)
+      return new TooManyAttemptsError(result.error, result.detail);
 
     return new BadRequestError(result.error!, result.detail);
   }

@@ -7,7 +7,10 @@ export type ErrorDescription = {
 export abstract class CustomError extends Error {
   abstract statusCode: number;
 
-  constructor(public message: any, protected status: string = new.target.name) {
+  constructor(
+    public message: any,
+    protected status: string = new.target.name,
+  ) {
     super(message);
     Object.setPrototypeOf(this, CustomError.prototype);
   }

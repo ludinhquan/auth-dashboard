@@ -14,7 +14,8 @@ import { useEffect } from "react";
 import { LoadingPage } from "@/pages/Loading/Loading";
 import { Layout } from "@/components/Layout";
 import { Profile } from "@/pages/Profile";
-import { EmailVerification } from "@/pages/EmailVerification";
+import { WelcomePage } from "@/pages/Welcome";
+import { EmailConfirmation } from "@/pages/EmailConfirmation";
 
 export const Router = () => {
   return (
@@ -25,18 +26,22 @@ export const Router = () => {
 };
 
 const ProtectedRoute = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticating, isAuthenticated, user } = useAuth();
+
+  if (isAuthenticating) return <LoadingPage />;
 
   if (!isAuthenticated)
     return <Navigate to={ROUTE_CONFIG.LOGIN.PATH} replace />;
 
-  if (!user?.isEmailConfirmed) return <EmailVerification />;
+  if (!user?.isEmailConfirmed) return <WelcomePage />;
 
   return <Layout />;
 };
 
 const LoginRoute = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticating, isAuthenticated } = useAuth();
+
+  if (isAuthenticating) return <LoadingPage />;
 
   if (!isAuthenticated) return <Outlet />;
 
@@ -44,19 +49,21 @@ const LoginRoute = () => {
 };
 
 const Routers = () => {
-  const { isAuthenticating, getMe } = useAuth();
+  const { getMe } = useAuth();
 
   useEffect(() => {
     getMe();
   }, [getMe]);
-
-  if (isAuthenticating) return <LoadingPage />;
 
   return (
     <Routes>
       <Route element={<LoginRoute />}>
         <Route path={ROUTE_CONFIG.LOGIN.PATH} element={<LoginPage />} />
       </Route>
+      <Route
+        path={ROUTE_CONFIG.EMAIL_CONFIRMATION.PATH}
+        element={<EmailConfirmation />}
+      />
       <Route element={<ProtectedRoute />}>
         <Route path={ROUTE_CONFIG.HOME.PATH} element={<HomePage />} />
         <Route path={ROUTE_CONFIG.PROFILE.PATH} element={<Profile />} />
