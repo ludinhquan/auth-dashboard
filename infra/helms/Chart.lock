@@ -1,0 +1,12 @@
+dependencies:
+- name: client
+  repository: file://charts/server
+  version: 0.1.0
+- name: server
+  repository: file://charts/server
+  version: 0.1.0
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 13.1.5
+digest: sha256:cdc71dda6df2d57c7733ba90a4543985c0f15034ecea2062e915bf1ec3ea3807
+generated: "2023-10-17T16:20:30.076535+07:00"

@@ -13,3 +13,7 @@ dependencies:
     repository: file://charts/server
     version: 0.1.0
     condition: server.enabled
+  - name: postgresql
+    repository: https://charts.bitnami.com/bitnami
+    version: 13.1.5
+    condition: postgresql.enabled

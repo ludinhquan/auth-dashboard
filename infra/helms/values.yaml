@@ -5,11 +5,45 @@ global:
     tag: latest
   env: {}
 
+postgresql:
+  enabled: true
+  fullnameOverride: postgresql
+  auth:
+    enablePostgresUser: true
+    postgresPassword: postgres
+    username: postgres
+    password: postgres
+    database: dashboard
+  primary:
+    service:
+      type: NodePort
+      nodePorts:
+        postgresql: 30017
+
 client:
   enabled: true
+  env:
+    VITE_BASE_URL: https://demo.draweditor.com/api/
+    VITE_AUTH0_DOMAIN: dev-gxpbno8tpm1wmxjb.us.auth0.com
+    VITE_AUTH0_CLIENT_ID: jjI55EQB40cd6nOzXRiT2l37QVAZL9H9
+    VITE_AUTH0_AUDIENCE: https://dev-gxpbno8tpm1wmxjb.us.auth0.com/api/v2/
 
 server:
   enabled: true
+  env:
+    DATABASE_URL: "postgresql://postgres:postgres@postgresql.demo:5432/dashboard?schema=public&sslmode=prefer&connect_timeout=300"
+
+    JWT_ACCESS_TOKEN_SECRET: access@1234A$
+    JWT_ACCESS_TOKEN_EXPIRATION_TIME: 1d
+    JWT_VERIFICATION_TOKEN_SECRET: verification@1234A$
+    JWT_VERIFICATION_TOKEN_EXPIRATION_TIME: 1d
+
+    CLIENT_URL: https://demo.draweditor.com
+    SERVER_URL: https://demo.draweditor.com
+
+    EMAIL_VERIFICATION_URL: https://demo.draweditor.com/email-confirmation
+    EMAIL_VERIFICATION_TIME_RESEND: 60
+    AUTH0_DOMAIN: dev-gxpbno8tpm1wmxjb.us.auth0.com
 
 ingress:
   enabled: true
