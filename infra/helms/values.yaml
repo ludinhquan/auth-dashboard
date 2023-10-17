@@ -18,7 +18,7 @@ postgresql:
     service:
       type: NodePort
       nodePorts:
-        postgresql: 30017
+        postgresql: 30432
 
 client:
   enabled: true
