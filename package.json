@@ -9,6 +9,8 @@
     "svr": "pnpm --filter '@app/server'",
     "client": "pnpm --filter '@app/client'",
     "build": "pnpm core build && pnpm svr build && pnpm client build",
+    "build:client": "pnpm core build && pnpm client build",
+    "build:server": "pnpm core build && pnpm svr build",
     "dev": "pnpm core build  && pnpm run --filter '@app*' --parallel dev"
   },
   "keywords": [],

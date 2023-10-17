@@ -1,0 +1,16 @@
+FROM node:18.17-alpine
+
+WORKDIR /app
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.json ./
+COPY ./apps/client ./apps/client
+COPY ./packages/core ./packages/core
+
+RUN npm install -g pnpm
+RUN pnpm install
+
+RUN pnpm build:client
+
+EXPOSE 3000
+
+CMD ["pnpm", "client", "dev"]
