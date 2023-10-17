@@ -9,7 +9,7 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { useAuth } from "@/hooks";
+import { useAuth, useGoogleAuth } from "@/hooks";
 import { useNavigate } from "react-router-dom";
 import { ROUTE_CONFIG } from "@/routers/config";
 
@@ -17,6 +17,7 @@ const pages: string[] = [];
 
 export const Header = () => {
   const { user, logout } = useAuth();
+  const { logout: googleLogout } = useGoogleAuth();
   const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -38,6 +39,11 @@ export const Header = () => {
     setAnchorElUser(null);
   };
 
+  const handleLogout = () => {
+    logout();
+    if (user?.isRegisteredWithGoogle) googleLogout();
+  };
+
   const settings = [
     {
       title: "Profile",
@@ -49,7 +55,7 @@ export const Header = () => {
     },
     {
       title: "Logout",
-      action: logout,
+      action: handleLogout,
     },
   ];
 
