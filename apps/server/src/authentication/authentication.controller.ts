@@ -17,6 +17,7 @@ import { CurrentUser } from '../decorators';
 import { AuthenticationService } from './authentication.service';
 import { RegisterDto, UpdatePasswordDto, UserDto } from './dto';
 import { JwtAuthenticationGuard } from './jwt';
+import JwtRefreshGuard from './jwt-refresh/jwt.guard';
 import { LocalAuthenticationGuard } from './local';
 
 @Controller()
@@ -51,7 +52,7 @@ export class AuthenticationController {
     @Body() _: RegisterDto, // for swagger document
   ) {
     const { accessTokenCookie, refreshTokenCookie } =
-      this.authenticationService.handleLoggedUser(user);
+      await this.authenticationService.handleLoggedUser(user);
 
     req.res?.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
     if (user.isEmailConfirmed) return;
@@ -91,5 +92,15 @@ export class AuthenticationController {
     if (result.ok) return;
 
     return new BadRequestError(result.error!);
+  }
+
+  @UseGuards(JwtRefreshGuard)
+  @Get('refresh')
+  refresh(@CurrentUser() user: User, @Req() request: Request) {
+    const { accessTokenCookie } =
+      this.authenticationService.getCookieWithJwtAccessToken(user);
+
+    request.res!.setHeader('Set-Cookie', accessTokenCookie);
+    return request.user;
   }
 }

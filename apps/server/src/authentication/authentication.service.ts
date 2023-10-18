@@ -58,7 +58,7 @@ export class AuthenticationService {
 
     const user = createdUserResult.value;
     const { accessTokenCookie, refreshTokenCookie } =
-      this.getCookiesForAuthenticatedUser(user);
+      await this.getCookiesForAuthenticatedUser(user);
 
     return Ok({ accessTokenCookie, refreshTokenCookie, user });
   }
@@ -85,10 +85,12 @@ export class AuthenticationService {
     return this.getCookiesForAuthenticatedUser(user);
   }
 
-  public getCookiesForAuthenticatedUser(user: User) {
+  public async getCookiesForAuthenticatedUser(user: User) {
     const { accessTokenCookie } = this.getCookieWithJwtAccessToken(user);
     const { refreshToken, refreshTokenCookie } =
       this.getCookieWithJwtRefreshToken(user);
+
+    await this.usersService.setCurrentRefreshToken(user.id, refreshToken);
 
     return { accessTokenCookie, refreshToken, refreshTokenCookie };
   }
@@ -124,7 +126,7 @@ export class AuthenticationService {
 
     return {
       refreshToken,
-      refreshTokenCookie: `Authentication=${refreshToken}; HttpOnly; Path=/; Max-Age=${options.expiresIn}`,
+      refreshTokenCookie: `Refresh=${refreshToken}; HttpOnly; Path=/; Max-Age=${options.expiresIn}`,
     };
   }
 

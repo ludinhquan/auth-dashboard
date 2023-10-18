@@ -10,8 +10,8 @@ POST localhost:4000/login
 content-type: application/json
 
 {
-  "email": "ludinhqauan1@gmail.com",
-  "password": "Abc@1234"
+  "email": "test@gmail.com",
+  "password": "Quan?abc1"
 }
 
 POST localhost:4000/logout

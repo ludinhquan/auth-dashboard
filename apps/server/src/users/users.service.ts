@@ -1,6 +1,7 @@
 import { Err, Ok } from '@lib/core';
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 import { CreateUserDto, UpdateUserDto } from './dto';
 import {
@@ -75,6 +76,32 @@ export class UsersService {
       where: { email },
       data: { lastTimeSendEmailConfirmation: new Date() },
     });
+  }
+
+  async setCurrentRefreshToken(userId: string, refreshToken: string) {
+    const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { currentHashedRefreshToken },
+    });
+  }
+
+  async getUserIfRefreshTokenMatches(userId: string, refreshToken: string) {
+    const userResult = await this.getById(userId);
+
+    if (userResult.fail) return userResult;
+
+    const user = userResult.value;
+
+    const isRefreshTokenMatching = await bcrypt.compare(
+      refreshToken,
+      user.currentHashedRefreshToken ?? '',
+    );
+
+    console.log('isRefreshTokenMatching:', isRefreshTokenMatching);
+    if (isRefreshTokenMatching) return Ok(user);
+
+    return Err();
   }
 
   async increaseLoginCount(userId: string) {

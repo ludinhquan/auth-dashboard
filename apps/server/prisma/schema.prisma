@@ -25,6 +25,7 @@ model User {
   lastLoginTimestamp            DateTime?
 
   loginCount Int @default(1)
+  currentHashedRefreshToken String?
 
   UserSession UserSession[]
 

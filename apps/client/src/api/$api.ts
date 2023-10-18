@@ -9,6 +9,7 @@ import type { Methods as Methods_idk8rz } from './login';
 import type { Methods as Methods_1rpsris } from './logout';
 import type { Methods as Methods_1uc1f5c } from './me';
 import type { Methods as Methods_1lgtes2 } from './ping';
+import type { Methods as Methods_1lokjgx } from './refresh';
 import type { Methods as Methods_1pbnd9f } from './register';
 import type { Methods as Methods_1i354bd } from './reset-password';
 import type { Methods as Methods_tli9od } from './user';
@@ -24,9 +25,10 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
   const PATH6 = '/logout';
   const PATH7 = '/me';
   const PATH8 = '/ping';
-  const PATH9 = '/register';
-  const PATH10 = '/reset-password';
-  const PATH11 = '/user';
+  const PATH9 = '/refresh';
+  const PATH10 = '/register';
+  const PATH11 = '/reset-password';
+  const PATH12 = '/user';
   const GET = 'GET';
   const POST = 'POST';
   const PATCH = 'PATCH';
@@ -100,26 +102,33 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
         fetch<void, BasicHeaders, Methods_1lgtes2['get']['status']>(prefix, PATH8, GET, option).send().then(r => r.body),
       $path: () => `${prefix}${PATH8}`,
     },
+    refresh: {
+      get: (option?: { config?: T | undefined } | undefined) =>
+        fetch<void, BasicHeaders, Methods_1lokjgx['get']['status']>(prefix, PATH9, GET, option).send(),
+      $get: (option?: { config?: T | undefined } | undefined) =>
+        fetch<void, BasicHeaders, Methods_1lokjgx['get']['status']>(prefix, PATH9, GET, option).send().then(r => r.body),
+      $path: () => `${prefix}${PATH9}`,
+    },
     register: {
       post: (option: { body: Methods_1pbnd9f['post']['reqBody'], config?: T | undefined }) =>
-        fetch<void, BasicHeaders, Methods_1pbnd9f['post']['status']>(prefix, PATH9, POST, option).send(),
+        fetch<void, BasicHeaders, Methods_1pbnd9f['post']['status']>(prefix, PATH10, POST, option).send(),
       $post: (option: { body: Methods_1pbnd9f['post']['reqBody'], config?: T | undefined }) =>
-        fetch<void, BasicHeaders, Methods_1pbnd9f['post']['status']>(prefix, PATH9, POST, option).send().then(r => r.body),
-      $path: () => `${prefix}${PATH9}`,
+        fetch<void, BasicHeaders, Methods_1pbnd9f['post']['status']>(prefix, PATH10, POST, option).send().then(r => r.body),
+      $path: () => `${prefix}${PATH10}`,
     },
     reset_password: {
       post: (option: { body: Methods_1i354bd['post']['reqBody'], config?: T | undefined }) =>
-        fetch<void, BasicHeaders, Methods_1i354bd['post']['status']>(prefix, PATH10, POST, option).send(),
+        fetch<void, BasicHeaders, Methods_1i354bd['post']['status']>(prefix, PATH11, POST, option).send(),
       $post: (option: { body: Methods_1i354bd['post']['reqBody'], config?: T | undefined }) =>
-        fetch<void, BasicHeaders, Methods_1i354bd['post']['status']>(prefix, PATH10, POST, option).send().then(r => r.body),
-      $path: () => `${prefix}${PATH10}`,
+        fetch<void, BasicHeaders, Methods_1i354bd['post']['status']>(prefix, PATH11, POST, option).send().then(r => r.body),
+      $path: () => `${prefix}${PATH11}`,
     },
     user: {
       patch: (option: { body: Methods_tli9od['patch']['reqBody'], config?: T | undefined }) =>
-        fetch<void, BasicHeaders, Methods_tli9od['patch']['status']>(prefix, PATH11, PATCH, option).send(),
+        fetch<void, BasicHeaders, Methods_tli9od['patch']['status']>(prefix, PATH12, PATCH, option).send(),
       $patch: (option: { body: Methods_tli9od['patch']['reqBody'], config?: T | undefined }) =>
-        fetch<void, BasicHeaders, Methods_tli9od['patch']['status']>(prefix, PATH11, PATCH, option).send().then(r => r.body),
-      $path: () => `${prefix}${PATH11}`,
+        fetch<void, BasicHeaders, Methods_tli9od['patch']['status']>(prefix, PATH12, PATCH, option).send().then(r => r.body),
+      $path: () => `${prefix}${PATH12}`,
     },
   };
 };

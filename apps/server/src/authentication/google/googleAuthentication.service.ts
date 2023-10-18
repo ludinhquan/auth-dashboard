@@ -24,7 +24,7 @@ export class GoogleAuthenticationService {
 
   async handleRegisteredUser(user: User) {
     const { accessTokenCookie, refreshTokenCookie } =
-      this.authenticationService.getCookiesForAuthenticatedUser(user);
+      await this.authenticationService.getCookiesForAuthenticatedUser(user);
 
     return Ok({
       accessTokenCookie,
