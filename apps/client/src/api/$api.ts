@@ -1,4 +1,7 @@
 import type { AspidaClient, BasicHeaders } from 'aspida';
+import { dataToURLString } from 'aspida';
+import type { Methods as Methods_6y3ekp } from './dashboard/summary';
+import type { Methods as Methods_1aa8x5p } from './dashboard/users';
 import type { Methods as Methods_1pit7fj } from './email-confirmation/confirm';
 import type { Methods as Methods_1cszvff } from './email-confirmation/resend-confirmation-link';
 import type { Methods as Methods_10oxnvc } from './google-authentication';
@@ -12,92 +15,111 @@ import type { Methods as Methods_tli9od } from './user';
 
 const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
   const prefix = (baseURL === undefined ? 'http://localhost:4000' : baseURL).replace(/\/$/, '');
-  const PATH0 = '/email-confirmation/confirm';
-  const PATH1 = '/email-confirmation/resend-confirmation-link';
-  const PATH2 = '/google-authentication';
-  const PATH3 = '/login';
-  const PATH4 = '/logout';
-  const PATH5 = '/me';
-  const PATH6 = '/ping';
-  const PATH7 = '/register';
-  const PATH8 = '/reset-password';
-  const PATH9 = '/user';
+  const PATH0 = '/dashboard/summary';
+  const PATH1 = '/dashboard/users';
+  const PATH2 = '/email-confirmation/confirm';
+  const PATH3 = '/email-confirmation/resend-confirmation-link';
+  const PATH4 = '/google-authentication';
+  const PATH5 = '/login';
+  const PATH6 = '/logout';
+  const PATH7 = '/me';
+  const PATH8 = '/ping';
+  const PATH9 = '/register';
+  const PATH10 = '/reset-password';
+  const PATH11 = '/user';
   const GET = 'GET';
   const POST = 'POST';
   const PATCH = 'PATCH';
 
   return {
+    dashboard: {
+      summary: {
+        get: (option?: { config?: T | undefined } | undefined) =>
+          fetch<Methods_6y3ekp['get']['resBody'], BasicHeaders, Methods_6y3ekp['get']['status']>(prefix, PATH0, GET, option).json(),
+        $get: (option?: { config?: T | undefined } | undefined) =>
+          fetch<Methods_6y3ekp['get']['resBody'], BasicHeaders, Methods_6y3ekp['get']['status']>(prefix, PATH0, GET, option).json().then(r => r.body),
+        $path: () => `${prefix}${PATH0}`,
+      },
+      users: {
+        get: (option?: { query?: Methods_1aa8x5p['get']['query'] | undefined, config?: T | undefined } | undefined) =>
+          fetch<Methods_1aa8x5p['get']['resBody'], BasicHeaders, Methods_1aa8x5p['get']['status']>(prefix, PATH1, GET, option).json(),
+        $get: (option?: { query?: Methods_1aa8x5p['get']['query'] | undefined, config?: T | undefined } | undefined) =>
+          fetch<Methods_1aa8x5p['get']['resBody'], BasicHeaders, Methods_1aa8x5p['get']['status']>(prefix, PATH1, GET, option).json().then(r => r.body),
+        $path: (option?: { method?: 'get' | undefined; query: Methods_1aa8x5p['get']['query'] } | undefined) =>
+          `${prefix}${PATH1}${option && option.query ? `?${dataToURLString(option.query)}` : ''}`,
+      },
+    },
     email_confirmation: {
       confirm: {
         post: (option: { body: Methods_1pit7fj['post']['reqBody'], config?: T | undefined }) =>
-          fetch<void, BasicHeaders, Methods_1pit7fj['post']['status']>(prefix, PATH0, POST, option).send(),
+          fetch<void, BasicHeaders, Methods_1pit7fj['post']['status']>(prefix, PATH2, POST, option).send(),
         $post: (option: { body: Methods_1pit7fj['post']['reqBody'], config?: T | undefined }) =>
-          fetch<void, BasicHeaders, Methods_1pit7fj['post']['status']>(prefix, PATH0, POST, option).send().then(r => r.body),
-        $path: () => `${prefix}${PATH0}`,
+          fetch<void, BasicHeaders, Methods_1pit7fj['post']['status']>(prefix, PATH2, POST, option).send().then(r => r.body),
+        $path: () => `${prefix}${PATH2}`,
       },
       resend_confirmation_link: {
         post: (option?: { config?: T | undefined } | undefined) =>
-          fetch<Methods_1cszvff['post']['resBody'], BasicHeaders, Methods_1cszvff['post']['status']>(prefix, PATH1, POST, option).json(),
+          fetch<Methods_1cszvff['post']['resBody'], BasicHeaders, Methods_1cszvff['post']['status']>(prefix, PATH3, POST, option).json(),
         $post: (option?: { config?: T | undefined } | undefined) =>
-          fetch<Methods_1cszvff['post']['resBody'], BasicHeaders, Methods_1cszvff['post']['status']>(prefix, PATH1, POST, option).json().then(r => r.body),
-        $path: () => `${prefix}${PATH1}`,
+          fetch<Methods_1cszvff['post']['resBody'], BasicHeaders, Methods_1cszvff['post']['status']>(prefix, PATH3, POST, option).json().then(r => r.body),
+        $path: () => `${prefix}${PATH3}`,
       },
     },
     google_authentication: {
       post: (option: { body: Methods_10oxnvc['post']['reqBody'], config?: T | undefined }) =>
-        fetch<void, BasicHeaders, Methods_10oxnvc['post']['status']>(prefix, PATH2, POST, option).send(),
+        fetch<void, BasicHeaders, Methods_10oxnvc['post']['status']>(prefix, PATH4, POST, option).send(),
       $post: (option: { body: Methods_10oxnvc['post']['reqBody'], config?: T | undefined }) =>
-        fetch<void, BasicHeaders, Methods_10oxnvc['post']['status']>(prefix, PATH2, POST, option).send().then(r => r.body),
-      $path: () => `${prefix}${PATH2}`,
+        fetch<void, BasicHeaders, Methods_10oxnvc['post']['status']>(prefix, PATH4, POST, option).send().then(r => r.body),
+      $path: () => `${prefix}${PATH4}`,
     },
     login: {
       post: (option: { body: Methods_idk8rz['post']['reqBody'], config?: T | undefined }) =>
-        fetch<void, BasicHeaders, Methods_idk8rz['post']['status']>(prefix, PATH3, POST, option).send(),
+        fetch<void, BasicHeaders, Methods_idk8rz['post']['status']>(prefix, PATH5, POST, option).send(),
       $post: (option: { body: Methods_idk8rz['post']['reqBody'], config?: T | undefined }) =>
-        fetch<void, BasicHeaders, Methods_idk8rz['post']['status']>(prefix, PATH3, POST, option).send().then(r => r.body),
-      $path: () => `${prefix}${PATH3}`,
+        fetch<void, BasicHeaders, Methods_idk8rz['post']['status']>(prefix, PATH5, POST, option).send().then(r => r.body),
+      $path: () => `${prefix}${PATH5}`,
     },
     logout: {
       post: (option?: { config?: T | undefined } | undefined) =>
-        fetch<void, BasicHeaders, Methods_1rpsris['post']['status']>(prefix, PATH4, POST, option).send(),
+        fetch<void, BasicHeaders, Methods_1rpsris['post']['status']>(prefix, PATH6, POST, option).send(),
       $post: (option?: { config?: T | undefined } | undefined) =>
-        fetch<void, BasicHeaders, Methods_1rpsris['post']['status']>(prefix, PATH4, POST, option).send().then(r => r.body),
-      $path: () => `${prefix}${PATH4}`,
+        fetch<void, BasicHeaders, Methods_1rpsris['post']['status']>(prefix, PATH6, POST, option).send().then(r => r.body),
+      $path: () => `${prefix}${PATH6}`,
     },
     me: {
       get: (option?: { config?: T | undefined } | undefined) =>
-        fetch<Methods_1uc1f5c['get']['resBody'], BasicHeaders, Methods_1uc1f5c['get']['status']>(prefix, PATH5, GET, option).json(),
+        fetch<Methods_1uc1f5c['get']['resBody'], BasicHeaders, Methods_1uc1f5c['get']['status']>(prefix, PATH7, GET, option).json(),
       $get: (option?: { config?: T | undefined } | undefined) =>
-        fetch<Methods_1uc1f5c['get']['resBody'], BasicHeaders, Methods_1uc1f5c['get']['status']>(prefix, PATH5, GET, option).json().then(r => r.body),
-      $path: () => `${prefix}${PATH5}`,
+        fetch<Methods_1uc1f5c['get']['resBody'], BasicHeaders, Methods_1uc1f5c['get']['status']>(prefix, PATH7, GET, option).json().then(r => r.body),
+      $path: () => `${prefix}${PATH7}`,
     },
     ping: {
       get: (option?: { config?: T | undefined } | undefined) =>
-        fetch<void, BasicHeaders, Methods_1lgtes2['get']['status']>(prefix, PATH6, GET, option).send(),
+        fetch<void, BasicHeaders, Methods_1lgtes2['get']['status']>(prefix, PATH8, GET, option).send(),
       $get: (option?: { config?: T | undefined } | undefined) =>
-        fetch<void, BasicHeaders, Methods_1lgtes2['get']['status']>(prefix, PATH6, GET, option).send().then(r => r.body),
-      $path: () => `${prefix}${PATH6}`,
+        fetch<void, BasicHeaders, Methods_1lgtes2['get']['status']>(prefix, PATH8, GET, option).send().then(r => r.body),
+      $path: () => `${prefix}${PATH8}`,
     },
     register: {
       post: (option: { body: Methods_1pbnd9f['post']['reqBody'], config?: T | undefined }) =>
-        fetch<void, BasicHeaders, Methods_1pbnd9f['post']['status']>(prefix, PATH7, POST, option).send(),
+        fetch<void, BasicHeaders, Methods_1pbnd9f['post']['status']>(prefix, PATH9, POST, option).send(),
       $post: (option: { body: Methods_1pbnd9f['post']['reqBody'], config?: T | undefined }) =>
-        fetch<void, BasicHeaders, Methods_1pbnd9f['post']['status']>(prefix, PATH7, POST, option).send().then(r => r.body),
-      $path: () => `${prefix}${PATH7}`,
+        fetch<void, BasicHeaders, Methods_1pbnd9f['post']['status']>(prefix, PATH9, POST, option).send().then(r => r.body),
+      $path: () => `${prefix}${PATH9}`,
     },
     reset_password: {
       post: (option: { body: Methods_1i354bd['post']['reqBody'], config?: T | undefined }) =>
-        fetch<void, BasicHeaders, Methods_1i354bd['post']['status']>(prefix, PATH8, POST, option).send(),
+        fetch<void, BasicHeaders, Methods_1i354bd['post']['status']>(prefix, PATH10, POST, option).send(),
       $post: (option: { body: Methods_1i354bd['post']['reqBody'], config?: T | undefined }) =>
-        fetch<void, BasicHeaders, Methods_1i354bd['post']['status']>(prefix, PATH8, POST, option).send().then(r => r.body),
-      $path: () => `${prefix}${PATH8}`,
+        fetch<void, BasicHeaders, Methods_1i354bd['post']['status']>(prefix, PATH10, POST, option).send().then(r => r.body),
+      $path: () => `${prefix}${PATH10}`,
     },
     user: {
       patch: (option: { body: Methods_tli9od['patch']['reqBody'], config?: T | undefined }) =>
-        fetch<void, BasicHeaders, Methods_tli9od['patch']['status']>(prefix, PATH9, PATCH, option).send(),
+        fetch<void, BasicHeaders, Methods_tli9od['patch']['status']>(prefix, PATH11, PATCH, option).send(),
       $patch: (option: { body: Methods_tli9od['patch']['reqBody'], config?: T | undefined }) =>
-        fetch<void, BasicHeaders, Methods_tli9od['patch']['status']>(prefix, PATH9, PATCH, option).send().then(r => r.body),
-      $path: () => `${prefix}${PATH9}`,
+        fetch<void, BasicHeaders, Methods_tli9od['patch']['status']>(prefix, PATH11, PATCH, option).send().then(r => r.body),
+      $path: () => `${prefix}${PATH11}`,
     },
   };
 };

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import * as day from 'dayjs';
 
-import { GetUserDto } from './dashboard.dto';
+import { GetUserDto } from './dto';
 
 import { DEFAULT_PAGE_LIMIT } from '@/utils';
 
@@ -32,13 +32,14 @@ export class DashboardService {
   }
 
   async getUsers(getUserDto: GetUserDto) {
-    const { page = 1, limit = DEFAULT_PAGE_LIMIT } = getUserDto;
+    const { page = 1, limit = DEFAULT_PAGE_LIMIT } = getUserDto ?? {};
 
     const [users, total] = await Promise.all([
       this.prismaClient.user.findMany({
         take: limit,
         skip: (page - 1) * limit,
         select: {
+          id: true,
           name: true,
           email: true,
           createdDate: true,
@@ -46,6 +47,7 @@ export class DashboardService {
           lastSessionTimestamp: true,
           isRegisteredWithGoogle: true,
         },
+        orderBy: { createdDate: 'desc' },
       }),
       this.prismaClient.user.count({}),
     ]);

@@ -8,7 +8,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiResponse, getSchemaPath } from '@nestjs/swagger';
+import { ApiOkResponse } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { Request } from 'express';
 

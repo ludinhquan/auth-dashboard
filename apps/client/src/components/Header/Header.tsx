@@ -67,12 +67,12 @@ export const Header = () => {
             variant="h6"
             noWrap
             component="a"
-            href="/"
             sx={{
-              mr: 2,
               color: "inherit",
               textDecoration: "none",
+              cursor: "pointer",
             }}
+            onClick={() => navigate(ROUTE_CONFIG.HOME.PATH)}
           >
             Dashboard
           </Typography>
