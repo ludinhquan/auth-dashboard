@@ -4,4 +4,7 @@ build
 swagger.json
 .env
 
+# Vim Editor
+curl.http
+
 *.tgz
