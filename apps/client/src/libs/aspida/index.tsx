@@ -4,21 +4,12 @@ import aspida from "@aspida/axios";
 import Axios from "axios";
 
 // Add a response interceptor
-
-export const handleRefreshToken = async () => {
-  try {
-    await aspidaClient.refresh.get();
-  } catch (error) {
-    window.location.pathname = "/login";
-  }
-};
-
 const axios = Axios.create();
 axios.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response.status === 401) {
-      await handleRefreshToken();
+    if (error.response.status === 401 && error.config.url !== "/refresh") {
+      await aspidaClient.refresh.get();
       return axios.request(error.config);
     }
 
