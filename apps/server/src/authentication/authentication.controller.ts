@@ -31,9 +31,10 @@ export class AuthenticationController {
 
       if (registerResult.fail)
         return new BadRequestError(registerResult.error as string);
-      const { user, accessTokenCookie } = registerResult.value;
+      const { user, accessTokenCookie, refreshTokenCookie } =
+        registerResult.value;
 
-      req.res?.setHeader('Set-Cookie', [accessTokenCookie]);
+      req.res?.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
 
       return user;
     } catch (error) {
@@ -49,9 +50,10 @@ export class AuthenticationController {
     @Req() req: Request,
     @Body() _: RegisterDto, // for swagger document
   ) {
-    const { accessTokenCookie } = this.authenticationService.handleLogin(user);
+    const { accessTokenCookie, refreshTokenCookie } =
+      this.authenticationService.handleLoggedUser(user);
 
-    req.res?.setHeader('Set-Cookie', [accessTokenCookie]);
+    req.res?.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie]);
     if (user.isEmailConfirmed) return;
 
     return user;

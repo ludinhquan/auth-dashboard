@@ -23,14 +23,12 @@ export class GoogleAuthenticationService {
   }
 
   async handleRegisteredUser(user: User) {
-    const accessTokenCookie =
-      this.authenticationService.getCookieWithJwtAccessToken(
-        user.id,
-        user.isRegisteredWithGoogle!,
-      );
+    const { accessTokenCookie, refreshTokenCookie } =
+      this.authenticationService.getCookiesForAuthenticatedUser(user);
 
     return Ok({
       accessTokenCookie,
+      refreshTokenCookie,
       user: omit(user, ['password']),
     });
   }

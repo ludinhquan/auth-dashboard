@@ -57,12 +57,10 @@ export class AuthenticationService {
     this.emailConfirmationService.sendVerificationLink(registrationData.email);
 
     const user = createdUserResult.value;
-    const accessTokenCookie = this.getCookieWithJwtAccessToken(
-      user.id,
-      user.isRegisteredWithGoogle!,
-    );
+    const { accessTokenCookie, refreshTokenCookie } =
+      this.getCookiesForAuthenticatedUser(user);
 
-    return Ok({ accessTokenCookie, user });
+    return Ok({ accessTokenCookie, refreshTokenCookie, user });
   }
 
   public async getAuthenticatedUser(
@@ -82,30 +80,52 @@ export class AuthenticationService {
     return Ok(userResult.value);
   }
 
-  public handleLogin(user: User) {
+  public handleLoggedUser(user: User) {
     this.usersService.increaseLoginCount(user.id);
-    const accessTokenCookie = this.getCookieWithJwtAccessToken(
-      user.id,
-      user.isEmailConfirmed!,
-    );
-
-    return { accessTokenCookie };
+    return this.getCookiesForAuthenticatedUser(user);
   }
 
-  public getCookieWithJwtAccessToken(
-    userId: string,
-    isEmailConfirmed: boolean,
-  ) {
-    const payload: TTokenPayload = { userId, isEmailConfirmed };
+  public getCookiesForAuthenticatedUser(user: User) {
+    const { accessTokenCookie } = this.getCookieWithJwtAccessToken(user);
+    const { refreshToken, refreshTokenCookie } =
+      this.getCookieWithJwtRefreshToken(user);
+
+    return { accessTokenCookie, refreshToken, refreshTokenCookie };
+  }
+
+  public getCookieWithJwtAccessToken(user: User) {
+    const payload: TTokenPayload = {
+      userId: user.id,
+      isEmailConfirmed: user.isEmailConfirmed,
+    };
 
     const options = {
       secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
       expiresIn: this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME'),
     };
 
-    const token = this.jwtService.sign(payload, options);
+    const accessToken = this.jwtService.sign(payload, options);
 
-    return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${options.expiresIn}`;
+    return {
+      accessToken,
+      accessTokenCookie: `Authentication=${accessToken}; HttpOnly; Path=/; Max-Age=${options.expiresIn}`,
+    };
+  }
+
+  public getCookieWithJwtRefreshToken(user: User) {
+    const payload: TTokenPayload = { userId: user.id };
+
+    const options = {
+      secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
+      expiresIn: this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
+    };
+
+    const refreshToken = this.jwtService.sign(payload, options);
+
+    return {
+      refreshToken,
+      refreshTokenCookie: `Authentication=${refreshToken}; HttpOnly; Path=/; Max-Age=${options.expiresIn}`,
+    };
   }
 
   public getCookiesForLogOut() {

@@ -12,11 +12,11 @@ export enum AuthError {
 
 export type TTokenPayload = {
   userId: string;
-  isEmailConfirmed?: boolean;
+  isEmailConfirmed?: boolean | null;
 };
 
 export type TRegisterRes = Result<
-  { user: User; accessTokenCookie: string },
+  { user: User; accessTokenCookie: string; refreshTokenCookie: string },
   RegisterError
 >;
 

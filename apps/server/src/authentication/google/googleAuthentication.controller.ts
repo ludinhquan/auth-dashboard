@@ -22,8 +22,11 @@ export class GoogleAuthenticationController {
 
     if (result.fail) return new UnauthorizedError(result.error!);
 
-    const { accessTokenCookie, user } = result.value;
-    request.res?.setHeader('Set-Cookie', [accessTokenCookie]);
+    const { accessTokenCookie, refreshTokenCookie, user } = result.value;
+    request.res!.setHeader('Set-Cookie', [
+      accessTokenCookie,
+      refreshTokenCookie,
+    ]);
     return user;
   }
 }
