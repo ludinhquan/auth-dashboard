@@ -2,7 +2,7 @@ import { Err, Ok } from '@lib/core';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
 
 import {
   AuthError,
@@ -80,6 +80,16 @@ export class AuthenticationService {
     if (!isMatch) return Err(AuthError.WrongCredentialsProvided);
 
     return Ok(userResult.value);
+  }
+
+  public handleLogin(user: User) {
+    this.usersService.increaseLoginCount(user.id);
+    const accessTokenCookie = this.getCookieWithJwtAccessToken(
+      user.id,
+      user.isEmailConfirmed!,
+    );
+
+    return { accessTokenCookie };
   }
 
   public getCookieWithJwtAccessToken(

@@ -23,9 +23,6 @@ export class GoogleAuthenticationService {
   }
 
   async handleRegisteredUser(user: User) {
-    // if (!user.isRegisteredWithGoogle)
-    //   return Err('User is not registered with google');
-
     const accessTokenCookie =
       this.authenticationService.getCookieWithJwtAccessToken(
         user.id,
@@ -57,7 +54,9 @@ export class GoogleAuthenticationService {
       if (userResult.fail)
         return this.registerUser({ email, name, avatar: avatar as string });
 
-      return this.handleRegisteredUser(userResult.value);
+      const user = userResult.value;
+      this.usersService.increaseLoginCount(user.id);
+      return this.handleRegisteredUser(user);
     } catch (error) {
       return Err(error);
     }

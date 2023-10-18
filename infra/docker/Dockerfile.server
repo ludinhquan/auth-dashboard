@@ -9,7 +9,7 @@ COPY ./packages/core ./packages/core
 RUN npm install -g pnpm
 RUN pnpm install
 
-RUN pnpm svr prisma:generate
+RUN pnpm svr prisma generate
 
 RUN pnpm build:server
 

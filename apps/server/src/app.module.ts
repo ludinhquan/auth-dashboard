@@ -4,6 +4,7 @@ import { JwtModule } from '@nestjs/jwt';
 
 import { AuthenticationModule } from './authentication';
 import { GoogleAuthenticationModule } from './authentication/google';
+import { DashboardModule } from './dashboard';
 import { PingController } from './ping.controller';
 
 @Module({
@@ -12,6 +13,7 @@ import { PingController } from './ping.controller';
     { module: JwtModule, global: true },
     AuthenticationModule,
     GoogleAuthenticationModule,
+    DashboardModule,
   ],
   controllers: [PingController],
 })

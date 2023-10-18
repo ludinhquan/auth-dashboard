@@ -49,14 +49,9 @@ export class AuthenticationController {
     @Req() req: Request,
     @Body() _: RegisterDto, // for swagger document
   ) {
-    const accessTokenCookie =
-      this.authenticationService.getCookieWithJwtAccessToken(
-        user.id,
-        user.isEmailConfirmed!,
-      );
+    const { accessTokenCookie } = this.authenticationService.handleLogin(user);
 
     req.res?.setHeader('Set-Cookie', [accessTokenCookie]);
-
     if (user.isEmailConfirmed) return;
 
     return user;

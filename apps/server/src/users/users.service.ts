@@ -11,6 +11,8 @@ import {
   TGetUserByIdRes,
 } from './users.type';
 
+type SessionData = {};
+
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaClient) {}
@@ -72,6 +74,25 @@ export class UsersService {
     return await this.prisma.user.update({
       where: { email },
       data: { lastTimeSendEmailConfirmation: new Date() },
+    });
+  }
+
+  async increaseLoginCount(userId: string) {
+    return await this.prisma.user.update({
+      where: { id: userId },
+      data: { loginCount: { increment: 1 }, lastLoginTimestamp: new Date() },
+    });
+  }
+
+  async createUserSession(userId: string) {
+    const lastSessionTimestamp = new Date();
+
+    return await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        lastSessionTimestamp,
+        UserSession: { create: { time: lastSessionTimestamp } },
+      },
     });
   }
 }
