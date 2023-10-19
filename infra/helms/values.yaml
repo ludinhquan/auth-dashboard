@@ -38,8 +38,8 @@ server:
     CLIENT_URL: https://demo.draweditor.com
     SERVER_URL: https://demo.draweditor.com
 
-    JWT_ACCESS_TOKEN_SECRET: "access@1234A$"
-    JWT_ACCESS_TOKEN_EXPIRATION_TIME: "30m"
+    JWT_ACCESS_TOKEN_SECRET: access@1234A$
+    JWT_ACCESS_TOKEN_EXPIRATION_TIME: 30m
 
     JWT_REFRESH_TOKEN_SECRET: refresh@1234$
     JWT_REFRESH_TOKEN_EXPIRATION_TIME: 7d
