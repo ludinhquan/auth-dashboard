@@ -23,7 +23,7 @@ postgresql:
 client:
   enabled: true
   env:
-    VITE_BASE_URL: https://demo.draweditor.com/api/
+    VITE_BASE_URL: https://demo.draweditor.com/api
     VITE_AUTH0_DOMAIN: dev-gxpbno8tpm1wmxjb.us.auth0.com
     VITE_AUTH0_CLIENT_ID: jjI55EQB40cd6nOzXRiT2l37QVAZL9H9
     VITE_AUTH0_AUDIENCE: https://dev-gxpbno8tpm1wmxjb.us.auth0.com/api/v2/
@@ -36,7 +36,7 @@ server:
     AUTH0_DOMAIN: dev-gxpbno8tpm1wmxjb.us.auth0.com
 
     CLIENT_URL: https://demo.draweditor.com
-    SERVER_URL: https://demo.draweditor.com
+    SERVER_URL: https://demo.draweditor.com/api
 
     JWT_ACCESS_TOKEN_SECRET: access@1234A$
     JWT_ACCESS_TOKEN_EXPIRATION_TIME: 30m

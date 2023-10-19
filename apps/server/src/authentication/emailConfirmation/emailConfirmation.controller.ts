@@ -13,7 +13,7 @@ import { ResendEmailError } from './emailConfirmation.type';
 import { Authentication, CurrentUser } from '@/decorators';
 
 @Controller('email-confirmation')
-@ApiTags('Email')
+@ApiTags('Email Confirmation')
 export class EmailConfirmationController {
   constructor(
     private readonly emailConfirmationService: EmailConfirmationService,
