@@ -1,6 +1,6 @@
 import { BadRequestError, TooManyAttemptsError } from '@lib/core';
 import { Controller, Post, Body } from '@nestjs/common';
-import { ApiOkResponse } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 
 import {
@@ -13,6 +13,7 @@ import { ResendEmailError } from './emailConfirmation.type';
 import { Authentication, CurrentUser } from '@/decorators';
 
 @Controller('email-confirmation')
+@ApiTags('Email')
 export class EmailConfirmationController {
   constructor(
     private readonly emailConfirmationService: EmailConfirmationService,

@@ -72,7 +72,7 @@ export class AuthenticationService {
 
     const isMatch = await Password.compare(
       plainTextPassword,
-      userResult.value.password!,
+      userResult.value.password ?? '',
     );
 
     if (!isMatch) return Err(AuthError.WrongCredentialsProvided);

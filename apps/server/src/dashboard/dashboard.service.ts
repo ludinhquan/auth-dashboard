@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import * as day from 'dayjs';
 
 import { GetUserDto } from './dto';
@@ -32,10 +32,21 @@ export class DashboardService {
   }
 
   async getUsers(getUserDto: GetUserDto) {
-    const { page = 1, limit = DEFAULT_PAGE_LIMIT } = getUserDto ?? {};
+    const {
+      name,
+      email,
+      page = 1,
+      limit = DEFAULT_PAGE_LIMIT,
+    } = getUserDto ?? {};
+
+    const where: Prisma.UserFindManyArgs['where'] = {};
+
+    if (name) where.name = { contains: name, mode: 'insensitive' };
+    if (email) where.email = { contains: email, mode: 'insensitive' };
 
     const [users, total] = await Promise.all([
       this.prismaClient.user.findMany({
+        where,
         take: limit,
         skip: (page - 1) * limit,
         select: {

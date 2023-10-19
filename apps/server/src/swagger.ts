@@ -16,8 +16,6 @@ export class Swagger {
       .addServer(server)
       .setTitle('Dashboard')
       .setVersion('1.0')
-      .addTag('auth')
-      .addBearerAuth()
       .build();
 
     return config;

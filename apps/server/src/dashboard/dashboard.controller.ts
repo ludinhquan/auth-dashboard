@@ -1,11 +1,14 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { ApiOkResponse, ApiResponse } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { DashboardService } from './dashboard.service';
 import { GetSummaryResponse, GetUserDto } from './dto';
 import { GetUsersResponse } from './dto/getUsers.dto';
 
+import { DEFAULT_PAGE_LIMIT } from '@/utils';
+
 @Controller('dashboard')
+@ApiTags('Dashboard')
 export class DashboardController {
   constructor(private dashboardService: DashboardService) {}
 
@@ -18,6 +21,11 @@ export class DashboardController {
   @Get('users')
   @ApiOkResponse({ type: GetUsersResponse })
   getUsers(@Query() getUserDto: GetUserDto) {
-    return this.dashboardService.getUsers(getUserDto);
+    const params: GetUserDto = {
+      ...getUserDto,
+      page: getUserDto.page ? Number(getUserDto.page) : 1,
+      limit: getUserDto.limit ? Number(getUserDto.limit) : DEFAULT_PAGE_LIMIT,
+    };
+    return this.dashboardService.getUsers(params);
   }
 }

@@ -12,8 +12,6 @@ import {
   TGetUserByIdRes,
 } from './users.type';
 
-type SessionData = {};
-
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaClient) {}

@@ -8,7 +8,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOkResponse } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { Request } from 'express';
 
@@ -21,6 +21,7 @@ import JwtRefreshGuard from './jwt-refresh/jwt.guard';
 import { LocalAuthenticationGuard } from './local';
 
 @Controller()
+@ApiTags('Authentication')
 export class AuthenticationController {
   constructor(private authenticationService: AuthenticationService) {}
 
@@ -49,8 +50,9 @@ export class AuthenticationController {
   async logIn(
     @CurrentUser() user: User,
     @Req() req: Request,
-    @Body() _: RegisterDto, // for swagger document
+    @Body() loginDto: RegisterDto, // for swagger document
   ) {
+    console.log('loginDto:', loginDto);
     const { accessTokenCookie, refreshTokenCookie } =
       await this.authenticationService.handleLoggedUser(user);
 
