@@ -84,6 +84,7 @@ export const LoginPage = () => {
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
+          key={formMode}
           sx={{
             marginTop: 20,
             display: "flex",
