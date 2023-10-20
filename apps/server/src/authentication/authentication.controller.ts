@@ -12,13 +12,13 @@ import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { Request } from 'express';
 
-import { CurrentUser } from '../decorators';
-
 import { AuthenticationService } from './authentication.service';
 import { RegisterDto, UpdatePasswordDto, UserDto } from './dto';
 import { JwtAuthenticationGuard } from './jwt';
 import JwtRefreshGuard from './jwt-refresh/jwt.guard';
 import { LocalAuthenticationGuard } from './local';
+
+import { CurrentUser } from '@/common';
 
 @Controller()
 @ApiTags('Authentication')

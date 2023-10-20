@@ -6,7 +6,7 @@ import {
   HttpExceptionFilter,
   HttpInterceptor,
   UserSessionInterceptor,
-} from './interceptors';
+} from './common';
 import { Swagger } from './swagger';
 import { UsersService } from './users';
 

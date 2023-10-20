@@ -17,7 +17,7 @@ const pages: string[] = [];
 
 export const Header = () => {
   const { user, logout } = useAuth();
-  const { logout: googleLogout } = useGoogleAuth();
+  const { isAuthenticated, logout: googleLogout } = useGoogleAuth();
   const navigate = useNavigate();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -39,9 +39,9 @@ export const Header = () => {
     setAnchorElUser(null);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    if (isAuthenticated) await googleLogout();
     logout();
-    if (user?.isRegisteredWithGoogle) googleLogout();
   };
 
   const settings = [

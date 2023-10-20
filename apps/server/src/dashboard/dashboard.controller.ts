@@ -5,7 +5,7 @@ import { DashboardService } from './dashboard.service';
 import { GetSummaryResponse, GetUserDto } from './dto';
 import { GetUsersResponse } from './dto/getUsers.dto';
 
-import { Authentication } from '@/decorators';
+import { Authentication } from '@/common';
 import { DEFAULT_PAGE_LIMIT } from '@/utils';
 
 @Controller('dashboard')

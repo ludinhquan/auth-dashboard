@@ -12,7 +12,7 @@ import {
 import { EmailConfirmationService } from './emailConfirmation.service';
 import { ResendEmailError } from './emailConfirmation.type';
 
-import { CurrentUser } from '@/decorators';
+import { CurrentUser } from '@/common';
 
 @Controller('email-confirmation')
 @ApiTags('Email Confirmation')

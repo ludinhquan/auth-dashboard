@@ -2,10 +2,10 @@ import { Body, Controller, Patch } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 
-import { Authentication, CurrentUser } from '../decorators';
-
 import { UpdateUserDto } from './dto';
 import { UsersService } from './users.service';
+
+import { Authentication, CurrentUser } from '@/common';
 
 @Authentication()
 @Controller('user')

@@ -2,7 +2,6 @@ import { CustomError } from '@lib/core';
 import {
   CallHandler,
   ExecutionContext,
-  HttpException,
   Injectable,
   Logger,
   NestInterceptor,

@@ -3,7 +3,7 @@ import { Body, Controller, Post, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Request } from 'express';
 
-import TokenVerificationDto from './googleAuthentication.dto';
+import { TokenVerificationDto } from './dto';
 import { GoogleAuthenticationService } from './googleAuthentication.service';
 
 @Controller('google-authentication')
