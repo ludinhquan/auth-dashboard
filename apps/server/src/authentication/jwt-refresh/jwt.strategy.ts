@@ -36,7 +36,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
       refreshToken,
     );
 
-    if (result.fail) throw new UnauthorizedError("User dosen't exists");
+    if (result.fail) throw new UnauthorizedError("User don't exists");
 
     result.value.password = null;
 

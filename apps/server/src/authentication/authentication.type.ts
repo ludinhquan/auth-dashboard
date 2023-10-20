@@ -8,6 +8,7 @@ export enum RegisterError {
 
 export enum AuthError {
   WrongCredentialsProvided = 'WrongCredentialsProvided',
+  UserEmailNotVerified = 'UserEmailNotVerified',
 }
 
 export type TTokenPayload = {

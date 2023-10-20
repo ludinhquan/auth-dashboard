@@ -7,8 +7,8 @@ import { Authentication, CurrentUser } from '../decorators';
 import { UpdateUserDto } from './dto';
 import { UsersService } from './users.service';
 
-@Controller('user')
 @Authentication()
+@Controller('user')
 @ApiTags('User')
 export class UsersController {
   constructor(private usersService: UsersService) {}

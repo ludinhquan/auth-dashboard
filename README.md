@@ -53,3 +53,8 @@ To deploy the apps to Kubernetes using Helm, run:
 Clone values file `infra/helms/values.yaml` to `infra/helms/values.prod.yaml` make change envs and apply your change with command:
 
 `helm upgrade release-name infra/helms -f infra/helms/values.prod.yaml`
+
+## TODO
+
+- [ ] Refactor Dockerfile for optimize build images process
+- [ ] Create hash service in common module

@@ -96,7 +96,6 @@ export class UsersService {
       user.currentHashedRefreshToken ?? '',
     );
 
-    console.log('isRefreshTokenMatching:', isRefreshTokenMatching);
     if (isRefreshTokenMatching) return Ok(user);
 
     return Err();
@@ -111,7 +110,6 @@ export class UsersService {
 
   async createUserSession(userId: string) {
     const lastSessionTimestamp = new Date();
-
     return await this.prisma.user.update({
       where: { id: userId },
       data: {

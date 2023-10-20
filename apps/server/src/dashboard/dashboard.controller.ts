@@ -5,10 +5,12 @@ import { DashboardService } from './dashboard.service';
 import { GetSummaryResponse, GetUserDto } from './dto';
 import { GetUsersResponse } from './dto/getUsers.dto';
 
+import { Authentication } from '@/decorators';
 import { DEFAULT_PAGE_LIMIT } from '@/utils';
 
 @Controller('dashboard')
 @ApiTags('Dashboard')
+@Authentication()
 export class DashboardController {
   constructor(private dashboardService: DashboardService) {}
 
