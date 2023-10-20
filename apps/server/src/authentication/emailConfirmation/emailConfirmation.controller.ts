@@ -1,7 +1,9 @@
 import { BadRequestError, TooManyAttemptsError } from '@lib/core';
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards } from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { User } from '@prisma/client';
+
+import { JwtAuthenticationGuard } from '../jwt';
 
 import {
   ConfirmEmailDto,
@@ -10,7 +12,7 @@ import {
 import { EmailConfirmationService } from './emailConfirmation.service';
 import { ResendEmailError } from './emailConfirmation.type';
 
-import { Authentication, CurrentUser } from '@/decorators';
+import { CurrentUser } from '@/decorators';
 
 @Controller('email-confirmation')
 @ApiTags('Email Confirmation')
@@ -32,7 +34,7 @@ export class EmailConfirmationController {
 
   @ApiOkResponse({ status: 200, type: ResendEmailResponseDto })
   @Post('resend-confirmation-link')
-  @Authentication()
+  @UseGuards(JwtAuthenticationGuard)
   async resendConfirmationLink(@CurrentUser() user: User) {
     const result = await this.emailConfirmationService.resendConfirmationLink(
       user.id,

@@ -5,6 +5,7 @@ import { User } from '@prisma/client';
 import { UserInfoClient } from 'auth0';
 
 import { AuthenticationService } from '../authentication.service';
+import { AuthError } from '../authentication.type';
 
 import { UsersService } from '@/users';
 
@@ -56,7 +57,10 @@ export class GoogleAuthenticationService {
       this.usersService.increaseLoginCount(user.id);
       return this.handleRegisteredUser(user);
     } catch (error) {
-      return Err(error);
+      if (error.statusCode === 401)
+        return Err(AuthError.WrongCredentialsProvided);
+
+      return Err(error.message);
     }
   }
 }
