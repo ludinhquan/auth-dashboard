@@ -20,7 +20,7 @@ export abstract class CustomError extends Error {
   public toJson() {
     return {
       statusCode: this.statusCode,
-      status: this.status,
+      status: this.message,
       timestamp: new Date().toISOString(),
       errors: this.serializeErrors(),
     };

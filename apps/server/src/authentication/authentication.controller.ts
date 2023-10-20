@@ -33,6 +33,7 @@ export class AuthenticationController {
 
       if (registerResult.fail)
         return new BadRequestError(registerResult.error as string);
+
       const { user, accessTokenCookie, refreshTokenCookie } =
         registerResult.value;
 

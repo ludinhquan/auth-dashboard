@@ -51,10 +51,11 @@ export class HttpInterceptor implements NestInterceptor {
 
     return handler.handle().pipe(
       map((data: unknown) => {
-        if (data instanceof CustomError)
-          throw new HttpException(data.toJson(), data.statusCode, {
-            cause: data.toJson(),
-          });
+        if (data instanceof CustomError) {
+          response.status(data.statusCode);
+          return data.toJson();
+        }
+
         return data;
       }),
     );

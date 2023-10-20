@@ -55,7 +55,7 @@ export const useAuth = () => {
       }
       setIsLoginLoading(false);
     },
-    [getMe, setIsLoginLoading],
+    [getMe, setIsLoginLoading, snackbar],
   );
 
   const register = useCallback(
@@ -65,15 +65,16 @@ export const useAuth = () => {
         await aspidaClient.register.post({ body: data });
         await getMe();
       } catch (e) {
+        const status = (e as any).response?.data?.status;
+
         snackbar({
           severity: "error",
-          message: "Wrong Credentials",
-          description: "Invalid email or password",
+          message: status,
         });
       }
       setIsLoginLoading(false);
     },
-    [getMe, setIsLoginLoading],
+    [getMe, setIsLoginLoading, snackbar],
   );
 
   const logout = useCallback(async () => {

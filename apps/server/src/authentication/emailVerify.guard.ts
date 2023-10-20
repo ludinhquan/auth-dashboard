@@ -15,7 +15,7 @@ export class EmailVerifyGuard implements CanActivate {
     const user = request.user as User;
 
     const emailVerified =
-      !user.isRegisteredWithGoogle && user.isEmailConfirmed == true;
+      user.isRegisteredWithGoogle || user.isEmailConfirmed == true;
 
     if (!emailVerified)
       throw new ForbiddenError(AuthError.UserEmailNotVerified);
