@@ -103,7 +103,9 @@ export class AuthenticationService {
 
     const options = {
       secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
-      expiresIn: this.configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME'),
+      expiresIn: `${this.configService.get(
+        'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
+      )}s`,
     };
 
     const accessToken = this.jwtService.sign(payload, options);
@@ -119,7 +121,9 @@ export class AuthenticationService {
 
     const options = {
       secret: this.configService.get('JWT_REFRESH_TOKEN_SECRET'),
-      expiresIn: this.configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME'),
+      expiresIn: `${this.configService.get(
+        'JWT_REFRESH_TOKEN_EXPIRATION_TIME',
+      )}s`,
     };
 
     const refreshToken = this.jwtService.sign(payload, options);
